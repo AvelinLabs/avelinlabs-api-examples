@@ -1,0 +1,26 @@
+{
+  "_note": "Example response from backend/docs/api.md.",
+  "scope": "active",
+  "top_skills": [
+    {
+      "skill_name": "python",
+      "job_count": 125000,
+      "percentage": 0.12
+    }
+  ],
+  "top_technologies": [
+    {
+      "technology_name": "aws",
+      "job_count": 88000,
+      "percentage": 0.09
+    }
+  ],
+  "remote_rate": [
+    {
+      "country_code": "US",
+      "remote_rate": 0.18,
+      "remote_jobs": 90000,
+      "total_jobs": 500000
+    }
+  ]
+}

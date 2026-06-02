@@ -1,0 +1,132 @@
+{
+  "_note": "Illustrative example based on backend/docs/api_contract_v1.md. Response fields may evolve additively during beta.",
+  "job_title": "Data Analyst",
+  "model_version": "skillvista-hybrid-ce-v2",
+  "confidence": 0.88,
+  "confidence_raw": 0.81,
+  "trust_score": 0.84,
+  "uncertainty": {
+    "aleatoric": 0.21,
+    "epistemic": 0.16,
+    "total": 0.185
+  },
+  "decision": {
+    "decision": "AUTO_ACCEPT",
+    "decision_score": 0.61,
+    "reason": "Confidence 0.880 meets minimum 0.750 and uncertainty 0.160 stays below maximum 0.250.",
+    "applied_rule": "auto_accept.min_confidence+max_uncertainty"
+  },
+  "confidence_type": "winner_strength",
+  "distribution_type": "softmax_probability",
+  "task_type": "DESCRIPTIVE",
+  "job_signals": [
+    "Structured Query Language (SQL)",
+    "dashboards",
+    "reporting"
+  ],
+  "inferred_intent": {
+    "primary_archetype": "descriptive_analytics",
+    "secondary_archetype": "diagnostic_analytics",
+    "confidence": 0.76
+  },
+  "title_reliability_score": 0.43,
+  "intent_override_applied": true,
+  "onet_families": [
+    "15-0000"
+  ],
+  "domain_confidence": 0.81,
+  "domain_is_ambiguous": false,
+  "is_ambiguous": false,
+  "confidence_level": "HIGH",
+  "llm_used": false,
+  "llm_status": "not_used",
+  "weak_signal_detected": false,
+  "weak_signal_reason": "signal_present",
+  "llm_reasoning": "Business Intelligence Analysts remain the strongest match for dashboard-heavy SQL work.",
+  "stage_rankings": null,
+  "results": [
+    {
+      "onet_code": "15-2051.01",
+      "onet_family": "15-2051",
+      "title": "Business Intelligence Analysts",
+      "confidence": 0.88,
+      "realism_score": 0.77,
+      "quality_score": 0.81,
+      "quality_breakdown": {
+        "domain_relevance_score": 0.833,
+        "expected_signal_coverage_score": 0.667,
+        "skill_similarity_score": 0.812,
+        "domain_alignment_score": 0.841,
+        "signal_overlap_score": 0.79,
+        "realism_score": 0.77,
+        "rule_quality_score": 0.82,
+        "llm_quality_score": 0.79,
+        "blended_quality_score": 0.811
+      },
+      "domain_grounding": "HIGH",
+      "domain_grounding_explanation": "The top result has strong inferred-domain and semantic support.",
+      "domain_alignment": "HIGH",
+      "quality_issues": [],
+      "suggested_improvements": [],
+      "heuristic_adjustment": 0.18,
+      "skills": [
+        {
+          "skill_name": "Data Analysis",
+          "importance": 93.0,
+          "level": 81.0
+        }
+      ],
+      "knowledge": [
+        {
+          "name": "Mathematics",
+          "importance": 89.5
+        }
+      ],
+      "abilities": [
+        {
+          "name": "Deductive Reasoning",
+          "importance": 87.2
+        }
+      ],
+      "tasks": [
+        "Develop dashboards and reports for business stakeholders"
+      ],
+      "technologies": [
+        {
+          "name": "Microsoft Power BI",
+          "is_hot": true,
+          "is_in_demand": true
+        }
+      ],
+      "matching_skills": [
+        "Structured Query Language (SQL)",
+        "Microsoft Power BI",
+        "Tableau"
+      ],
+      "matching_skills_source": "input_extracted",
+      "related_occupations": [
+        {
+          "onet_code": "15-2051.00",
+          "title": "Data Scientists",
+          "tier": "Primary-Short",
+          "score": 92
+        }
+      ],
+      "explanation": {
+        "why_match": "This role matches because it strongly aligns with core skills in SQL, Power BI and reporting.",
+        "key_factors": [
+          "Strong match on core skills.",
+          "High alignment with dashboards and reporting tasks.",
+          "Domain grounding is HIGH."
+        ],
+        "score_summary": {
+          "semantic_match": 0.81,
+          "skill_match": 0.88,
+          "domain_alignment": 0.84,
+          "signal_overlap": 0.79
+        }
+      },
+      "confidence_explanation": null
+    }
+  ]
+}

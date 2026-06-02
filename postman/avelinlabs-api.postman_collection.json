@@ -1,0 +1,105 @@
+{
+  "info": {
+    "name": "Avelinlabs API Examples",
+    "description": "Beta / early access examples aligned with backend docs. API surfaces may evolve. Configure base_url and avelin_api_key collection variables before use.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.avelinlabs.com"
+    },
+    {
+      "key": "avelin_api_key",
+      "value": "replace-with-your-key"
+    },
+    {
+      "key": "onet_code",
+      "value": "15-1252.00"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{avelin_api_key}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Job Analyze",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/v1/job/analyze",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Data Analyst\",\n  \"description\": \"Build SQL dashboards, analyze business metrics, create reports in Power BI, and communicate insights to stakeholders.\",\n  \"debug\": false\n}"
+        }
+      }
+    },
+    {
+      "name": "Job Classify",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/v1/job/classify",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Help Desk Technician\",\n  \"description\": \"Resolve user support issues, troubleshoot hardware and software problems, document incidents, and escalate complex tickets.\",\n  \"debug\": false\n}"
+        }
+      }
+    },
+    {
+      "name": "Occupation",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/v1/occupation/{{onet_code}}"
+      }
+    },
+    {
+      "name": "Occupation Profile",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/v1/occupation/profile/{{onet_code}}"
+      }
+    },
+    {
+      "name": "Market Top US Technology",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/v1/market/top?type=technology&scope=active&country=US&limit=5"
+      }
+    },
+    {
+      "name": "Market Overview",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/v1/market/overview"
+      }
+    },
+    {
+      "name": "Health Ready",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "url": "{{base_url}}/health/ready"
+      }
+    }
+  ]
+}

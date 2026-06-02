@@ -1,0 +1,6 @@
+{
+  "_note": "Example error response from backend/docs/api_contract_v1.md.",
+  "detail": "Invalid API key",
+  "request_id": "ab12cd34",
+  "status_code": 401
+}

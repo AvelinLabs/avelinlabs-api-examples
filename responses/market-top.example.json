@@ -1,0 +1,13 @@
+{
+  "_note": "Example response from backend/docs/api.md.",
+  "scope": "active",
+  "country": "US",
+  "terms": [
+    {
+      "term_type": "technology",
+      "term_name": "aws",
+      "job_count": 88000,
+      "percentage": 0.09
+    }
+  ]
+}

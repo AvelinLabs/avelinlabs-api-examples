@@ -1,0 +1,46 @@
+{
+  "_note": "Example response from backend/docs/api.md with a note added for beta examples.",
+  "occupation": {
+    "onet_code": "15-1232.00",
+    "title": "Computer User Support Specialists"
+  },
+  "confidence": 0.88,
+  "confidence_raw": 0.81,
+  "trust_score": 0.82,
+  "uncertainty": {
+    "aleatoric": 0.19,
+    "epistemic": 0.17,
+    "total": 0.18
+  },
+  "decision": {
+    "decision": "AUTO_ACCEPT",
+    "decision_score": 0.52,
+    "reason": "Confidence 0.880 meets minimum 0.750 and uncertainty 0.180 stays below maximum 0.250.",
+    "applied_rule": "auto_accept.min_confidence+max_uncertainty"
+  },
+  "confidence_type": "winner_strength",
+  "distribution_type": "softmax_probability",
+  "task_type": "ENGINEERING",
+  "job_signals": [
+    "support",
+    "troubleshooting"
+  ],
+  "inferred_intent": {
+    "primary_archetype": "descriptive_analytics",
+    "secondary_archetype": "descriptive_analytics",
+    "confidence": 0.39
+  },
+  "title_reliability_score": 0.74,
+  "intent_override_applied": false,
+  "onet_families": [
+    "15-0000"
+  ],
+  "domain_confidence": 0.69,
+  "domain_is_ambiguous": false,
+  "is_ambiguous": false,
+  "confidence_level": "HIGH",
+  "llm_used": false,
+  "llm_status": "not_used",
+  "weak_signal_detected": false,
+  "weak_signal_reason": "signal_present"
+}

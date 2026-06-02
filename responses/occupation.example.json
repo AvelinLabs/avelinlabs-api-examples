@@ -1,0 +1,12 @@
+{
+  "_note": "Example response shape from backend/docs/api.md.",
+  "onet_code": "15-1252.00",
+  "title": "Software Developers",
+  "top_skills": [
+    {
+      "skill_name": "Programming",
+      "importance": 92.5,
+      "level": 78.0
+    }
+  ]
+}

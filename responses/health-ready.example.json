@@ -1,0 +1,4 @@
+{
+  "_note": "Illustrative public readiness response. backend/docs/api_contract_v1.md states that public health payloads are intentionally minimal and must not expose dependency topology.",
+  "status": "ready"
+}

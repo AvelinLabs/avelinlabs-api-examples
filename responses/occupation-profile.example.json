@@ -1,0 +1,23 @@
+{
+  "_note": "Illustrative profile response. backend/docs/api.md documents this endpoint as a read-only O*NET reference profile but does not provide a full exact response payload.",
+  "onet_code": "15-1252.00",
+  "title": "Software Developers",
+  "description": "Research, design, and develop computer and network software or specialized utility programs.",
+  "skills": [
+    {
+      "skill_name": "Programming",
+      "importance": 92.5,
+      "level": 78.0
+    }
+  ],
+  "technologies": [
+    {
+      "name": "Python",
+      "is_hot": true,
+      "is_in_demand": true
+    }
+  ],
+  "tasks": [
+    "Develop software systems and applications."
+  ]
+}
