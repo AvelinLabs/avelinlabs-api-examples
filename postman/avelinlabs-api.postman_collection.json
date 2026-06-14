@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Avelinlabs API Examples",
-    "description": "Beta / early access examples aligned with backend docs. API surfaces may evolve. Configure base_url and avelin_api_key collection variables before use.",
+    "description": "Beta / early access examples aligned with the public API documentation. API surfaces may evolve. Configure base_url and avelin_api_key collection variables before use.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
