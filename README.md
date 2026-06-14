@@ -10,7 +10,7 @@ https://github.com/AvelinLabs/avelinlabs-api-examples
 
 Avelinlabs is currently in beta / early access. API surfaces, examples, response fields and documentation may evolve as the platform matures.
 
-These examples are aligned with the current documented implementation in `backend/docs/`. They are intended to be minimal starting points, not a guarantee of production readiness or final API shape.
+These examples are aligned with the current public beta API documentation. They are intended to be minimal starting points, not a guarantee of production readiness or final API shape.
 
 ## Base URL
 
@@ -45,9 +45,10 @@ Public liveness/readiness endpoints (`/health/live`, `/health/ready`) are anonym
 ## Repository Structure
 
 ```text
-api-examples/
+.
 |-- README.md
 |-- curl/
+|-- docs/
 |-- python/
 |-- payloads/
 |-- responses/
@@ -70,7 +71,7 @@ The examples cover documented public product and health surfaces:
 - `GET /health/live`
 - `GET /health/ready`
 
-Platform onboarding and account endpoints are documented in backend docs, but full account lifecycle examples are not included here yet. Those flows involve registration, email verification, management bearer tokens and runtime API key creation, so examples should be added only when the public contract is verified for the target environment.
+Platform onboarding and account endpoints are described in the public API documentation, but full account lifecycle examples are not included here yet. Those flows involve registration, email verification, management bearer tokens and runtime API key creation, so executable examples should be added only when the public contract is verified for the target environment.
 
 ## cURL Examples
 
@@ -80,14 +81,14 @@ From the repository root:
 export BASE_URL="https://api.avelinlabs.com"
 export AVELIN_API_KEY="replace-with-your-key"
 
-bash api-examples/curl/job-analyze.sh
-bash api-examples/curl/job-classify.sh
-bash api-examples/curl/occupation-profile.sh
-bash api-examples/curl/market-top-us-technology.sh
-bash api-examples/curl/health-ready.sh
+bash curl/job-analyze.sh
+bash curl/job-classify.sh
+bash curl/occupation-profile.sh
+bash curl/market-top-us-technology.sh
+bash curl/health-ready.sh
 ```
 
-The cURL examples keep payloads in `api-examples/payloads/` and pass the bearer token through the `Authorization` header where required.
+The cURL examples keep payloads in `payloads/` and pass the bearer token through the `Authorization` header where required. Scripts that send payload files resolve the repository root from the script location, so they can be run from the repository root without a nested `api-examples/` path.
 
 ## Python Examples
 
@@ -103,23 +104,25 @@ Then run:
 set BASE_URL=https://api.avelinlabs.com
 set AVELIN_API_KEY=replace-with-your-key
 
-python api-examples/python/job_analyze.py
-python api-examples/python/job_classify.py
-python api-examples/python/occupation_profile.py
-python api-examples/python/market_top.py
-python api-examples/python/health_ready.py
+python python/job_analyze.py
+python python/job_analyze_summary.py
+python python/job_classify.py
+python python/occupation_profile.py
+python python/market_top.py
+python python/health_ready.py
 ```
 
 On macOS/Linux, use `export` instead of `set`.
 
 ## Payloads
 
-Payload files are stored under `api-examples/payloads/`.
+Payload files are stored under `payloads/`.
 
 Current payloads:
 
 - `job-analyze.json`
 - `job-classify.json`
+- `hr-service-role-intake.json`
 
 The request schema for `job/analyze` and `job/classify` is documented as:
 
@@ -129,16 +132,26 @@ The request schema for `job/analyze` and `job/classify` is documented as:
 
 ## Responses
 
-Sample responses are stored under `api-examples/responses/`.
+Sample responses are stored under `responses/`.
 
 Some responses are copied from or closely aligned to backend documentation. Others are conservative illustrative examples where the docs describe the response concept but not an exact payload. Illustrative files include a `"_note"` field so they are not mistaken for guaranteed response contracts.
+
+## Response Interpretation
+
+The annotated job analysis response guide is available at:
+
+```text
+docs/annotated-job-analyze-response.md
+```
+
+It explains the fields in `responses/job-analyze.example.json` in plain English for business and technical evaluators.
 
 ## Postman
 
 A simple Postman collection is available at:
 
 ```text
-api-examples/postman/avelinlabs-api.postman_collection.json
+postman/avelinlabs-api.postman_collection.json
 ```
 
 Configure these collection variables before use:
@@ -150,6 +163,7 @@ Configure these collection variables before use:
 
 - Do not treat these examples as finalized API contracts.
 - Public `/api/v1/*` paths are documented under additive-only governance for v0.1.
+- Current occupation intelligence is grounded in O*NET 30.3. Market `technology` examples use the public API category name and may represent software-oriented terms in the current reference model.
 - Confidence-like fields are not all calibrated probabilities.
 - Public product endpoints require customer runtime API keys.
 - Management endpoints use management bearer tokens from login and are intentionally not expanded here yet.
