@@ -1,0 +1,5 @@
+{
+  "detail": "customer_id is derived from authentication context",
+  "request_id": "req_synthetic_001",
+  "status_code": 422
+}

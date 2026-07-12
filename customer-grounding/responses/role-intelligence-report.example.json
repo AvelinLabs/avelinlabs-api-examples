@@ -1,0 +1,74 @@
+{
+  "trace_id": "trace_synthetic_001",
+  "report": {
+    "role_title": "Senior Analyst",
+    "grounded_summary": "Synthetic grounded summary based on tenant-scoped Customer Grounding evidence.",
+    "key_role_criteria": [
+      {
+        "text": "Clarify ambiguous client requirements and maintain traceable review evidence.",
+        "evidence_ids": [
+          "evidence_synthetic_001"
+        ],
+        "source_ids": [
+          "synthetic-role-criteria"
+        ],
+        "artifact_ids": [
+          "artifact_synthetic_001"
+        ],
+        "focus_areas": [
+          "requirements clarity",
+          "evidence review"
+        ]
+      }
+    ],
+    "evidence_ids": [
+      "evidence_synthetic_001"
+    ],
+    "source_ids": [
+      "synthetic-role-criteria"
+    ],
+    "artifact_ids": [
+      "artifact_synthetic_001"
+    ],
+    "confidence": {
+      "score": 0.72,
+      "level": "medium",
+      "indicators": [
+        "tenant-scoped evidence available"
+      ]
+    },
+    "uncertainty": {
+      "level": "low",
+      "indicators": [
+        "synthetic example"
+      ]
+    },
+    "review_flags": [
+      "human_review_recommended"
+    ]
+  },
+  "evidence_references": [
+    {
+      "evidence_id": "evidence_synthetic_001",
+      "evidence_type": "customer_grounding_artifact",
+      "source_id": "synthetic-role-criteria",
+      "artifact_id": "artifact_synthetic_001",
+      "source_title": "Synthetic Senior Analyst Role Criteria",
+      "source_version": "srcver_synthetic_001",
+      "citation_locator": "paragraph 1",
+      "excerpt": "Senior analysts translate ambiguous client needs into decision-ready requirements.",
+      "relevance_score": 0.78,
+      "retrieval_reason": "Matched requirements and evidence review terms.",
+      "support_relationship": "supports",
+      "confidence_hint": 0.72,
+      "permissions_scope": "customer_private",
+      "timestamp": "2026-07-12T12:03:00+00:00"
+    }
+  ],
+  "uncertainty_signals": [
+    "synthetic example"
+  ],
+  "review_flags": [
+    "human_review_recommended"
+  ]
+}

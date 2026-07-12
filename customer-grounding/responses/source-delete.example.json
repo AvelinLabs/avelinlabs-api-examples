@@ -1,0 +1,33 @@
+{
+  "source": {
+    "source_id": "synthetic-role-criteria",
+    "source_type": "customer_text",
+    "title": "Synthetic Senior Analyst Role Criteria",
+    "owner": "example",
+    "origin_ref_present": false,
+    "permissions_scope": "customer_private",
+    "retention_class": "short_lived",
+    "status": "deleted",
+    "active_version_id": null,
+    "latest_version_id": "srcver_synthetic_001",
+    "metadata": {
+      "example": "customer-grounding-controlled-beta"
+    },
+    "created_at": "2026-07-12T12:00:00+00:00",
+    "updated_at": "2026-07-12T12:06:00+00:00",
+    "disabled_at": null,
+    "deleted_at": "2026-07-12T12:06:00+00:00"
+  },
+  "deletion": {
+    "deletion_request_id": "delreq_synthetic_001",
+    "source_id": "synthetic-role-criteria",
+    "source_version_id": "srcver_synthetic_001",
+    "reason_present": true,
+    "status": "completed",
+    "requested_at": "2026-07-12T12:06:00+00:00",
+    "retrieval_excluded_at": "2026-07-12T12:06:00+00:00",
+    "content_deleted_at": "2026-07-12T12:06:00+00:00",
+    "index_deleted_at": "2026-07-12T12:06:00+00:00",
+    "tombstone_retained_until": null
+  }
+}

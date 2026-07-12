@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "avelinlabs-runtime": {
+      "command": "python",
+      "args": [
+        "backend/scripts/run_avelin_mcp_server.py"
+      ],
+      "env": {
+        "AVELIN_MCP_API_BASE_URL": "https://api.avelinlabs.com",
+        "AVELIN_MCP_RUNTIME_API_KEY": "replace-with-runtime-api-key",
+        "AVELIN_MCP_REQUEST_TIMEOUT_SECONDS": "30"
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "customer_id": "do-not-send-customer-id",
+  "content_type": "text/markdown",
+  "text": "This request is intentionally invalid because tenant scope is derived from authentication."
+}

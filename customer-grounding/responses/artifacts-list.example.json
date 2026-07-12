@@ -1,0 +1,17 @@
+{
+  "artifacts": [
+    {
+      "artifact_id": "artifact_synthetic_001",
+      "source_id": "synthetic-role-criteria",
+      "source_version_id": "srcver_synthetic_001",
+      "artifact_type": "text_chunk",
+      "chunk_id": "chunk-001",
+      "citation_locator": "paragraph 1",
+      "excerpt": "Senior analysts translate ambiguous client needs into decision-ready requirements.",
+      "domain": "workforce",
+      "quality_status": "usable",
+      "permissions_scope": "customer_private",
+      "created_at": "2026-07-12T12:01:00+00:00"
+    }
+  ]
+}

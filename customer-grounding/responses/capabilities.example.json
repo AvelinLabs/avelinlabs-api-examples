@@ -1,0 +1,52 @@
+{
+  "status": "controlled_beta",
+  "tenant_model": "account_scoped",
+  "tenant_scope": "auth_derived",
+  "supported_source_ingestion": [
+    "text/plain",
+    "text/markdown",
+    "application/pdf",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  ],
+  "supported_reports": [
+    "grounded_role_intelligence"
+  ],
+  "retrieval": {
+    "mode": "deterministic",
+    "hybrid_retrieval": false,
+    "vector_retrieval": false
+  },
+  "file_ingestion": {
+    "max_file_size_bytes": 5242880,
+    "pdf": {
+      "supported": true,
+      "selectable_text_only": true,
+      "ocr": false,
+      "image_extraction": false
+    },
+    "docx": {
+      "supported": true,
+      "paragraphs": true,
+      "tables": true,
+      "macros": false,
+      "embedded_objects": false
+    }
+  },
+  "connectors": {
+    "supported": false
+  },
+  "mcp": {
+    "supported": true
+  },
+  "trace": {
+    "supported": true
+  },
+  "evidence_snapshots": {
+    "supported": true
+  },
+  "customer_id_input": {
+    "accepted": false,
+    "source": "authentication_context"
+  },
+  "production_ga": false
+}

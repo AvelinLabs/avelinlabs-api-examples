@@ -1,0 +1,36 @@
+{
+  "trace": {
+    "trace_id": "trace_synthetic_001",
+    "decision_id": "decision_synthetic_001",
+    "decision_type": "grounded_role_intelligence",
+    "access_channel": "customer_api",
+    "evidence_ids": [
+      "evidence_synthetic_001"
+    ],
+    "source_ids": [
+      "synthetic-role-criteria"
+    ],
+    "artifact_ids": [
+      "artifact_synthetic_001"
+    ],
+    "confidence_factors": [
+      "tenant-scoped evidence available"
+    ],
+    "uncertainty_signals": [
+      "synthetic example"
+    ],
+    "review_flags": [
+      "human_review_recommended"
+    ],
+    "output_sections": [
+      "summary",
+      "criteria",
+      "evidence"
+    ],
+    "trace_visibility": "customer",
+    "created_at": "2026-07-12T12:03:00+00:00",
+    "expires_at": null,
+    "redacted_at": null
+  },
+  "evidence_snapshots": []
+}

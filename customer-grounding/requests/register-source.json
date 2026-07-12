@@ -1,0 +1,11 @@
+{
+  "source_id": "synthetic-role-criteria",
+  "source_type": "customer_text",
+  "title": "Synthetic Senior Analyst Role Criteria",
+  "owner": "example",
+  "permissions_scope": "customer_private",
+  "retention_class": "short_lived",
+  "metadata": {
+    "example": "customer-grounding-controlled-beta"
+  }
+}

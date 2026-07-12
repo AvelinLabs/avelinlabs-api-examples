@@ -1,0 +1,5 @@
+{
+  "detail": "file extension does not match content type",
+  "request_id": "req_synthetic_002",
+  "status_code": 422
+}
