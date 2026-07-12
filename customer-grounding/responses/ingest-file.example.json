@@ -1,0 +1,58 @@
+{
+  "_note": "The same response shape is used for supported text, Markdown, PDF, and DOCX uploads. Parser version varies by format.",
+  "source_version": {
+    "source_version_id": "srcver_synthetic_docx_001",
+    "source_id": "synthetic-role-criteria",
+    "content_hash": "sha256-example-docx",
+    "version_label": "synthetic-docx-v1",
+    "status": "active",
+    "raw_content_ref_present": false,
+    "normalized_text_ref_present": false,
+    "parser_version": "docx-python-docx-v1",
+    "chunker_version": "deterministic-paragraph-v1",
+    "metadata_extractor_version": "none-v1",
+    "indexer_version": "deterministic-keyword-v1",
+    "received_at": "2026-07-12T12:02:00+00:00",
+    "ingested_at": "2026-07-12T12:02:00+00:00",
+    "activated_at": "2026-07-12T12:02:00+00:00",
+    "superseded_at": null,
+    "failed_at": null,
+    "failure_code": null,
+    "failure_detail": null
+  },
+  "ingestion_run": {
+    "ingestion_run_id": "ingrun_synthetic_docx_001",
+    "source_id": "synthetic-role-criteria",
+    "source_version_id": "srcver_synthetic_docx_001",
+    "trigger_type": "customer_api_file_ingest",
+    "actor_type": "customer_api",
+    "status": "completed",
+    "started_at": "2026-07-12T12:02:00+00:00",
+    "completed_at": "2026-07-12T12:02:00+00:00",
+    "artifact_count": 1,
+    "warning_count": 0,
+    "error_count": 0,
+    "failure_code": null,
+    "failure_detail": null,
+    "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "parser_version": "docx-python-docx-v1",
+    "idempotency_key_present": true
+  },
+  "artifacts": [
+    {
+      "artifact_id": "artifact_synthetic_docx_001",
+      "source_id": "synthetic-role-criteria",
+      "source_version_id": "srcver_synthetic_docx_001",
+      "artifact_type": "text_chunk",
+      "chunk_id": "chunk-001",
+      "citation_locator": "paragraph 1",
+      "excerpt": "Synthetic DOCX role criteria covering intake clarity and evidence review.",
+      "domain": "workforce",
+      "quality_status": "usable",
+      "permissions_scope": "customer_private",
+      "created_at": "2026-07-12T12:02:00+00:00"
+    }
+  ],
+  "lifecycle_events": [],
+  "idempotent": false
+}

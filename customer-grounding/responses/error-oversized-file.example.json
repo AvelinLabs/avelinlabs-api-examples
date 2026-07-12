@@ -1,0 +1,5 @@
+{
+  "detail": "file exceeds maximum size of 5242880 bytes",
+  "request_id": "req_synthetic_003",
+  "status_code": 413
+}

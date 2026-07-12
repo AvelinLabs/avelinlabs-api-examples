@@ -1,0 +1,20 @@
+{
+  "ingestion_run": {
+    "ingestion_run_id": "ingrun_synthetic_001",
+    "source_id": "synthetic-role-criteria",
+    "source_version_id": "srcver_synthetic_001",
+    "status": "completed",
+    "trigger_type": "customer_api_text_ingest",
+    "started_at": "2026-07-12T12:01:00+00:00",
+    "completed_at": "2026-07-12T12:01:00+00:00",
+    "artifact_count": 1,
+    "warning_count": 0,
+    "error_count": 0,
+    "failure_code": null,
+    "failure_detail": null,
+    "content_type": "text/markdown",
+    "parser_version": "text-markdown-v1",
+    "created_at": "2026-07-12T12:01:00+00:00",
+    "updated_at": "2026-07-12T12:01:00+00:00"
+  }
+}

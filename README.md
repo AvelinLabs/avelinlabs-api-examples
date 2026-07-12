@@ -48,12 +48,33 @@ Public liveness/readiness endpoints (`/health/live`, `/health/ready`) are anonym
 .
 |-- README.md
 |-- curl/
+|-- customer-grounding/
+|-- customer-grounding-live-demo-app/
 |-- docs/
 |-- python/
 |-- payloads/
 |-- responses/
 `-- postman/
 ```
+
+## Customer Grounding Live Demo App
+
+The visual, interactive Customer Grounding example is:
+
+```text
+customer-grounding-live-demo-app/
+```
+
+It runs locally on `127.0.0.1`, stores the Runtime API key only in the local server process, supports text and file ingestion, shows grounded Role Intelligence with evidence, confidence/review flags and trace details, and includes cleanup plus cURL/MCP adoption snippets.
+
+Launch it with:
+
+```powershell
+cd customer-grounding-live-demo-app
+C:\programdata\anaconda3\envs\skillvista\python.exe server.py --host 127.0.0.1 --port 8765
+```
+
+Open `http://127.0.0.1:8765/`.
 
 ## Covered Endpoints
 
@@ -70,6 +91,7 @@ The examples cover documented public product and health surfaces:
 - `GET /api/v1/market/remote-rate`
 - `GET /health/live`
 - `GET /health/ready`
+- Customer Grounding controlled-beta REST paths under `/api/v1/grounding/*`
 
 Platform onboarding and account endpoints are described in the public API documentation, but full account lifecycle examples are not included here yet. Those flows involve registration, email verification, management bearer tokens and runtime API key creation, so executable examples should be added only when the public contract is verified for the target environment.
 
@@ -86,6 +108,7 @@ bash curl/job-classify.sh
 bash curl/occupation-profile.sh
 bash curl/market-top-us-technology.sh
 bash curl/health-ready.sh
+bash customer-grounding/curl/customer-grounding-workflow.sh
 ```
 
 The cURL examples keep payloads in `payloads/` and pass the bearer token through the `Authorization` header where required. Scripts that send payload files resolve the repository root from the script location, so they can be run from the repository root without a nested `api-examples/` path.
@@ -110,6 +133,7 @@ python python/job_classify.py
 python python/occupation_profile.py
 python python/market_top.py
 python python/health_ready.py
+python customer-grounding/python/customer_grounding_workflow.py
 ```
 
 On macOS/Linux, use `export` instead of `set`.
@@ -123,6 +147,10 @@ Current payloads:
 - `job-analyze.json`
 - `job-classify.json`
 - `hr-service-role-intake.json`
+
+Customer Grounding request examples are stored under
+`customer-grounding/requests/` because that API surface has multipart file
+examples and lifecycle-specific payloads.
 
 The request schema for `job/analyze` and `job/classify` is documented as:
 

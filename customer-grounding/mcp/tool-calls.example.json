@@ -1,0 +1,66 @@
+{
+  "notes": [
+    "These are example MCP tool payloads. Do not include customer_id.",
+    "Current MCP tools support text ingestion only. Use REST for file ingestion."
+  ],
+  "tool_calls": [
+    {
+      "tool": "avelin_register_grounding_source",
+      "arguments": {
+        "source_id": "synthetic-role-criteria",
+        "source_type": "customer_text",
+        "title": "Synthetic Senior Analyst Role Criteria",
+        "owner": "example",
+        "permissions_scope": "customer_private",
+        "retention_class": "short_lived",
+        "metadata": {
+          "example": "mcp-controlled-beta"
+        }
+      }
+    },
+    {
+      "tool": "avelin_ingest_grounding_text",
+      "arguments": {
+        "source_id": "synthetic-role-criteria",
+        "content_type": "text/markdown",
+        "version_label": "mcp-text-v1",
+        "text": "# Senior Analyst Criteria\n\nSynthetic role criteria for intake clarity and evidence review."
+      }
+    },
+    {
+      "tool": "avelin_list_grounding_sources",
+      "arguments": {}
+    },
+    {
+      "tool": "avelin_generate_grounded_role_intelligence",
+      "arguments": {
+        "role_title": "Senior Analyst",
+        "role_context": "Requirements workshops, SQL analysis, and evidence-backed review guidance.",
+        "focus_areas": [
+          "requirements clarity",
+          "evidence review"
+        ],
+        "top_k": 5
+      }
+    },
+    {
+      "tool": "avelin_get_grounding_trace",
+      "arguments": {
+        "trace_id": "trace_synthetic_001"
+      }
+    },
+    {
+      "tool": "avelin_disable_grounding_source",
+      "arguments": {
+        "source_id": "synthetic-role-criteria"
+      }
+    },
+    {
+      "tool": "avelin_delete_grounding_source",
+      "arguments": {
+        "source_id": "synthetic-role-criteria",
+        "reason": "example cleanup"
+      }
+    }
+  ]
+}
