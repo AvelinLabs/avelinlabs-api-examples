@@ -3,12 +3,12 @@
   const ACTIVE_SOURCE_STATUSES = new Set(["active"]);
   const CHECKLIST_STEPS = [
     ["connected", "Connected"],
-    ["sourceCreated", "Source created"],
-    ["contextIngested", "Context ingested"],
-    ["reportGenerated", "Grounded report generated"],
+    ["sourceCreated", "Context registered"],
+    ["contextIngested", "Context ready"],
+    ["reportGenerated", "Intelligence generated"],
     ["evidenceReturned", "Evidence returned"],
-    ["traceAvailable", "Trace available"],
-    ["cleanupCompleted", "Cleanup completed"],
+    ["traceAvailable", "Trace reviewed"],
+    ["cleanupCompleted", "Demo data removed"],
   ];
 
   const state = {
@@ -185,7 +185,7 @@
   }
 
   function gateMessage() {
-    return "Create and ingest a source before generating a grounded report.";
+    return "Prepare customer context before generating grounded intelligence.";
   }
 
   function resetReportState() {
@@ -214,7 +214,7 @@
     state.documentsIngested = false;
     state.cleanupCompleted = false;
     resetReportState();
-    renderSourceState(message || "No source ingested yet.");
+    renderSourceState(message || "No customer context prepared yet.");
     updateGenerateGate();
   }
 
@@ -231,13 +231,13 @@
       cleanupCompleted: state.cleanupCompleted,
     };
     const detail = {
-      connected: status.connected ? "Capabilities confirmed" : "Waiting for capabilities check",
-      sourceCreated: status.sourceCreated ? `Confirmed ${state.source?.status || "source"}` : "No confirmed source",
-      contextIngested: status.contextIngested ? `${artifactCount()} document chunk(s) indexed` : "No completed ingestion run",
-      reportGenerated: status.reportGenerated ? "Report API returned" : "Not generated",
+      connected: status.connected ? "Connection verified" : "Waiting for connection test",
+      sourceCreated: status.sourceCreated ? "Customer context registered" : "No context prepared",
+      contextIngested: status.contextIngested ? `${artifactCount()} evidence segment(s) ready` : "Context not processed",
+      reportGenerated: status.reportGenerated ? "Grounded result generated" : "Not generated",
       evidenceReturned: status.evidenceReturned ? `${state.lastEvidenceCount} evidence item(s)` : "No evidence confirmed",
-      traceAvailable: status.traceAvailable ? "Trace fetched" : "Trace not fetched",
-      cleanupCompleted: status.cleanupCompleted ? "Source deleted" : "Not cleaned up",
+      traceAvailable: status.traceAvailable ? "Trace reviewed" : "Trace not reviewed",
+      cleanupCompleted: status.cleanupCompleted ? "Demo context removed" : "Demo context retained",
     };
     list.replaceChildren();
     CHECKLIST_STEPS.forEach(([id, label]) => {
@@ -264,7 +264,7 @@
       button.title = ready ? "" : gateMessage();
     }
     if (gate) {
-      gate.textContent = ready ? "Ready to generate from confirmed ingested source." : gateMessage();
+      gate.textContent = ready ? "Customer context is ready. You can generate grounded intelligence." : gateMessage();
       gate.className = ready ? "gate-note ready" : "gate-note blocked";
     }
     renderChecklist();
@@ -272,20 +272,20 @@
 
   function missingReadinessReasons() {
     const reasons = [];
-    if (!state.sourceId) reasons.push("source ID not confirmed");
-    if (!hasConfirmedSourceIntent()) reasons.push("source not created in this session or selected intentionally");
-    if (!state.sourceActive) reasons.push("source is not active");
-    if (!state.ingestionCompleted) reasons.push("no successful ingestion run");
-    if (!state.documentsIngested) reasons.push("no ingested documents/artifacts");
+    if (!state.sourceId) reasons.push("context identifier not confirmed");
+    if (!hasConfirmedSourceIntent()) reasons.push("context not prepared or selected");
+    if (!state.sourceActive) reasons.push("context is not active");
+    if (!state.ingestionCompleted) reasons.push("context processing has not completed");
+    if (!state.documentsIngested) reasons.push("no evidence segments are available");
     return reasons;
   }
 
   function renderSourceState(message) {
     const ready = readyToGenerate();
     renderKeyValues($("run-metadata"), [
-      ["Source status", state.source?.status || "not created"],
-      ["Ingestion status", state.successfulRun?.status || "not completed"],
-      ["Documents ingested", state.documentsIngested ? artifactCount() : 0],
+      ["Context status", state.source?.status || "not prepared"],
+      ["Processing status", state.successfulRun?.status || "not completed"],
+      ["Evidence segments", state.documentsIngested ? artifactCount() : 0],
       ["Ready to generate", ready ? "yes" : "no"],
     ]);
     const runMetadata = $("run-metadata");
@@ -329,7 +329,7 @@
   async function refreshSourceStatus(sourceId, options = {}) {
     const safeSourceId = sanitizeSourceId(sourceId);
     if (!safeSourceId) throw new Error(gateMessage());
-    setStatus("ingestion-status", "Refreshing source, artifacts, and ingestion runs...", "warning");
+    setStatus("ingestion-status", "Checking customer context readiness...", "warning");
     const readinessPayload = await api(`/local-api/sources/${encodeURIComponent(safeSourceId)}/readiness`);
     applySourceStatus({
       source: readinessPayload.source,
@@ -340,8 +340,8 @@
     });
     const ready = readyToGenerate();
     const message = ready
-      ? `Source active. Ingestion completed with ${artifactCount()} document chunk(s). Ready to generate.`
-      : `Source status refreshed, but not ready: ${missingReadinessReasons().join("; ")}.`;
+      ? `Customer context ready with ${artifactCount()} evidence segment(s). You can generate grounded intelligence.`
+      : `Customer context is not ready: ${missingReadinessReasons().join("; ")}.`;
     renderSourceState(message);
     updateGenerateGate();
     updateSnippets();
@@ -352,7 +352,7 @@
     const health = await api("/local-api/health");
     if (health.config?.base_url) $("base-url").value = health.config.base_url;
     if (health.config?.api_key_configured) {
-      setText("connection-status", `Onboarding Runtime API key configured in local server memory (${health.config.api_key_preview}). Test capabilities to verify access.`);
+      setText("connection-status", `API key configured for this session (${health.config.api_key_preview}). Test the connection to continue.`);
     }
   }
 
@@ -381,7 +381,7 @@
     $("focus-areas").value = (state.sample.focus_areas || []).join(", ");
     $("source-id").value = generatedSourceId();
     $("sample-summary").textContent = state.sample.why_grounding_matters || "Synthetic sample loaded.";
-    resetSourceTracking("No source ingested yet. The Source ID is a fresh suggestion; create and ingest it before generating.");
+    resetSourceTracking("No customer context prepared yet. Select Prepare grounded context before generating.");
     renderOfflinePreview();
     updateSnippets();
   }
@@ -398,22 +398,16 @@
     setText(
       "connection-status",
       data.config.api_key_configured
-        ? `Configured for ${data.config.base_url}. Key is kept in local server process memory only.`
-        : `API Base URL saved for ${data.config.base_url}. Paste the onboarding Runtime API key to run the live flow.`
+        ? `Connection saved for ${data.config.base_url}. The API key is kept only for this local session.`
+        : `API Base URL saved for ${data.config.base_url}. Enter the API key provided by AvelinLabs to continue.`
     );
   }
 
   async function testConnection() {
-    setText("connection-status", "Testing /api/v1/grounding/capabilities...");
-    const data = await api("/local-api/capabilities");
-    const caps = [
-      `status=${data.status || "unknown"}`,
-      `tenant=${data.tenant_model || "unknown"}`,
-      `retrieval=${data.retrieval?.mode || "unknown"}`,
-      `mcp=${data.mcp?.supported === true ? "supported" : "not reported"}`,
-    ];
+    setText("connection-status", "Testing connection to Customer Grounding...");
+    await api("/local-api/capabilities");
     state.connectionConfirmed = true;
-    setText("connection-status", `Connected. ${caps.join(" | ")}`);
+    setText("connection-status", "Connected. Customer Grounding is available.");
     renderChecklist();
   }
 
@@ -425,7 +419,7 @@
     state.sourceSelectedIntentionally = false;
     state.cleanupCompleted = false;
     resetReportState();
-    setStatus("ingestion-status", "Creating source...", "warning");
+    setStatus("ingestion-status", "Preparing customer context...", "warning");
     const file = $("context-file").files[0];
     const sourcePayload = {
       source_id: sourceId,
@@ -441,7 +435,7 @@
     state.source = created.source || null;
     state.sourceCreatedInSession = true;
     $("source-id").value = state.sourceId;
-    setStatus("ingestion-status", "Source created. Ingesting context...", "warning");
+    setStatus("ingestion-status", "Customer context registered. Processing content...", "warning");
     if (file) {
       const form = new FormData();
       form.append("source_id", state.sourceId);
@@ -478,7 +472,7 @@
       updateGenerateGate();
       return;
     }
-    setText("result-mode", "Generating live grounded Role Intelligence...");
+    setText("result-mode", "Generating grounded Role Intelligence...");
     setAlert("");
     const payload = {
       role_title: $("role-title").value.trim(),
@@ -498,22 +492,22 @@
 
   function renderOfflinePreview() {
     const role = $("role-title").value || state.sample?.suggested_role_title || "Selected role";
-    setText("result-mode", "Offline preview only - does not call AvelinLabs APIs.");
+    setText("result-mode", "Preview example - no API call has been made.");
     setAlert("");
-    setText("executive-summary", state.sample?.why_grounding_matters || "Enter an API Base URL and onboarding Runtime API key to generate a live grounded report.");
+    setText("executive-summary", state.sample?.why_grounding_matters || "Connect to AvelinLabs to generate grounded intelligence from this context.");
     setText("generic-title", `Generic ${role} answer`);
     setText("generic-copy", "A broad answer can describe responsibilities but usually misses the customer's operating model, evidence, confidence, and review flags.");
     setText("grounded-title", "Grounded output after live generation");
     setText("grounded-copy", state.sample?.why_grounding_matters || "The live report will use the selected source and return evidence-backed role criteria.");
-    setText("confidence-card", "Live confidence appears after report generation.");
-    setText("result-status-card", "No live report generated yet.");
+    setText("confidence-card", "Confidence appears after generation.");
+    setText("result-status-card", "No grounded result generated yet.");
     const advancedResult = $("advanced-result-details");
     if (advancedResult) advancedResult.textContent = "Trace and decision IDs appear after generation.";
     const criteria = $("criteria-list");
-    criteria.replaceChildren(card("Expected grounded value", state.sample?.suggested_business_question || "The live result will show source-backed findings."));
+    criteria.replaceChildren(card("Expected grounded value", state.sample?.suggested_business_question || "The grounded result will show evidence-backed findings."));
     const evidence = $("evidence-list");
-    evidence.replaceChildren(card("Evidence preview", "Live evidence cards appear after ingestion and report generation."));
-    pills("review-flags", ["Human review required", "Offline preview only"]);
+    evidence.replaceChildren(card("Evidence preview", "Evidence appears after the customer context is prepared and intelligence is generated."));
+    pills("review-flags", ["Human review required", "Preview only"]);
   }
 
   function reportEvidenceItems(payload) {
@@ -556,15 +550,15 @@
     state.lastEvidenceCount = evidence.length;
 
     if (demoReady) {
-      setText("result-mode", traceOnly ? "Trace refreshed. Grounded evidence found." : "Grounded evidence found. Live API returned source-backed output.");
-      setAlert(`Grounded evidence found. ${evidence.length} evidence item(s) returned from confirmed source context.`, "success");
+      setText("result-mode", traceOnly ? "Trace reviewed. Grounded evidence confirmed." : "Grounded evidence found. The result is supported by customer context.");
+      setAlert(`Grounded evidence found. ${evidence.length} evidence item(s) support this result.`, "success");
       setText("grounded-title", "Grounded evidence found");
       setText("grounded-copy", report.grounded_summary || "Evidence-backed summary returned.");
     } else if (missingEvidence) {
       setText("result-mode", "Ungrounded fallback / needs review.");
-      setAlert("No grounding evidence was returned. This result is not suitable for demo.", "error");
+      setAlert("No grounding evidence was returned. Do not use this result for a decision.", "error");
       setText("grounded-title", "Ungrounded fallback / needs review");
-      setText("grounded-copy", report.grounded_summary || "No grounding evidence was returned. This result is not suitable for demo.");
+      setText("grounded-copy", report.grounded_summary || "No grounding evidence was returned. Human review is required.");
     } else if (missingCriteria) {
       setText("result-mode", "Evidence returned, but criteria extraction needs review.");
       setAlert("Grounding evidence was returned, but no criteria were extracted. Treat this as needs review, not a success demo state.", "warning");
@@ -607,7 +601,7 @@
       );
     });
     if (!criteriaList.children.length) {
-      criteriaList.appendChild(card("No criteria returned", "The API response did not include key_role_criteria. This is not a success demo state.", "", "warning-card"));
+      criteriaList.appendChild(card("No findings returned", "No grounded findings were returned. Human review is required.", "", "warning-card"));
     }
 
     const evidenceList = $("evidence-list");
@@ -627,14 +621,14 @@
       );
     });
     if (!evidenceList.children.length) {
-      evidenceList.appendChild(card("No evidence returned", "No grounding evidence was returned. This result is not suitable for demo.", "", "warning-card"));
+      evidenceList.appendChild(card("No evidence returned", "No grounding evidence was returned. Do not use this result for a decision.", "", "warning-card"));
     }
     pills("review-flags", flags);
     renderChecklist();
   }
 
   async function fetchTrace() {
-    if (!state.traceId) throw new Error("Generate a live report first; no trace_id is available.");
+    if (!state.traceId) throw new Error("Generate grounded intelligence before reviewing traceability.");
     const payload = await api(`/local-api/traces/${encodeURIComponent(state.traceId)}`);
     state.trace = payload;
     state.traceAvailable = Boolean(payload.trace?.trace_id);
@@ -642,7 +636,7 @@
     const trace = payload.trace || {};
     const evidenceCount = (payload.evidence_snapshots || []).length;
     renderKeyValues($("trace-view"), [
-      ["Trace status", state.traceAvailable ? "available" : "not available"],
+      ["Trace status", state.traceAvailable ? "reviewed" : "not available"],
       ["Evidence snapshots", evidenceCount],
       ["Review flags", (trace.review_flags || []).join(", ") || "none returned"],
       ["Created at", formatTimestamp(trace.created_at)],
@@ -673,7 +667,7 @@
 
   async function cleanupSource() {
     const sourceId = state.sourceId || currentSourceInput();
-    if (!sourceId) throw new Error("No source_id to clean up.");
+    if (!sourceId) throw new Error("No demo context is available to remove.");
     const payload = await api(`/local-api/sources/${encodeURIComponent(sourceId)}`, {
       method: "DELETE",
       body: JSON.stringify({ reason: "customer grounding live demo cleanup" }),
@@ -689,10 +683,10 @@
     state.source = payload.source || state.source;
     setStatus(
       "cleanup-status",
-      `Cleanup ${deleted ? "completed" : "requested"} for ${payload.source?.source_id || sourceId}; status ${payload.source?.status || "-"}.`,
+      deleted ? "Demo context removed successfully." : "Demo context removal requested.",
       deleted ? "success" : "warning"
     );
-    setStatus("ingestion-status", "Cleanup completed. Create and ingest a new source before generating another grounded report.", "warning");
+    setStatus("ingestion-status", "Demo context removed. Prepare new customer context to generate another result.", "warning");
     $("source-id").value = generatedSourceId();
     state.sourceId = "";
     renderSourceState();
@@ -776,7 +770,7 @@
     $("load-offline-preview").addEventListener("click", renderOfflinePreview);
     $("source-id").addEventListener("input", () => {
       if (state.sourceId && currentSourceInput() !== state.sourceId) {
-        resetSourceTracking("Source ID changed. Refresh selected source or create and ingest before generating.");
+        resetSourceTracking("The context identifier changed. Check context status or prepare the context again.");
       }
       updateSnippets();
     });
@@ -793,17 +787,17 @@
   }
 
   function showError(error) {
-    const detail = error.payload ? JSON.stringify(error.payload, null, 2) : error.message;
-    setStatus("ingestion-status", detail, "error");
-    setAlert(error.message || "Request failed", "error");
-    setText("connection-status", error.message || "Request failed");
+    const message = error.message || "The request could not be completed.";
+    setStatus("ingestion-status", message, "error");
+    setAlert(message, "error");
+    setText("connection-status", message);
     updateGenerateGate();
   }
 
   async function init() {
     bind();
     renderChecklist();
-    resetSourceTracking("No source ingested yet.");
+    resetSourceTracking("No customer context prepared yet.");
     await loadHealth().catch(() => undefined);
     await loadSamples().catch(showError);
     updateGenerateGate();
