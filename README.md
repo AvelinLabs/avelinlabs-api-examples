@@ -71,7 +71,7 @@ Launch it with:
 
 ```powershell
 cd customer-grounding-live-demo-app
-C:\programdata\anaconda3\envs\skillvista\python.exe server.py --host 127.0.0.1 --port 8765
+python server.py --host 127.0.0.1 --port 8765
 ```
 
 Open `http://127.0.0.1:8765/`.
