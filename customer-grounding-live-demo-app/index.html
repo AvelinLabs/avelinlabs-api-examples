@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AvelinLabs Customer Grounding Live Demo App</title>
+    <title>AvelinLabs Customer Grounding</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -14,43 +14,41 @@
             <img src="assets/avelinlabs-logo.png" alt="AvelinLabs logo" class="brand-logo">
             <span>AvelinLabs</span>
           </div>
-          <p class="eyebrow">Customer Grounding Live Demo App</p>
+          <p class="eyebrow">Customer Grounding</p>
           <h1>Turn customer context into grounded role intelligence.</h1>
-          <p class="hero-copy">Run a local evaluator/developer demo that calls existing AvelinLabs Customer Grounding APIs through a localhost proxy. Paste the onboarding Runtime API key into the UI, use synthetic samples or approved customer-provided files, inspect evidence and traceability, then copy cURL or MCP adoption snippets.</p>
+          <p class="hero-copy">Add customer-specific context and turn it into evidence-backed role intelligence. Review the findings, confidence, source evidence, and traceability behind every result.</p>
           <div class="badge-row">
-            <span>Local app</span>
-            <span>API-first / MCP-first</span>
-            <span>Controlled beta</span>
+            <span>Customer-specific</span>
+            <span>Evidence-backed</span>
+            <span>Traceable</span>
             <span>Human decision support</span>
           </div>
         </div>
         <aside class="connection-card" aria-label="Connection status">
           <p class="eyebrow">Step 1 - Connect</p>
-          <h2>Runtime connection</h2>
+          <h2>Connect to AvelinLabs</h2>
           <label>API Base URL<input id="base-url" type="url" value="http://127.0.0.1:8010" autocomplete="off"></label>
-          <label>Runtime API key<input id="api-key" type="password" placeholder="Onboarding key; process memory only" autocomplete="off"></label>
+          <label>Runtime API key<input id="api-key" type="password" placeholder="API key provided by AvelinLabs" autocomplete="off"></label>
           <div class="button-row">
-            <button id="save-config" type="button">Use key for session</button>
-            <button id="test-connection" type="button" class="secondary">Test capabilities</button>
+            <button id="save-config" type="button">Save connection</button>
+            <button id="test-connection" type="button" class="secondary">Test connection</button>
           </div>
-          <p id="connection-status" class="status-line">Not connected. Enter API Base URL and onboarding Runtime API key to run the live flow.</p>
+          <p id="connection-status" class="status-line">Not connected. Enter the API Base URL and API key provided by AvelinLabs.</p>
         </aside>
       </header>
 
       <section class="timeline" aria-label="Demo workflow">
-        <article><strong>1</strong><span>Connect</span><small>Capabilities check</small></article>
+        <article><strong>1</strong><span>Connect</span><small>Verify access</small></article>
         <article><strong>2</strong><span>Add context</span><small>Sample, paste, or file</small></article>
-        <article><strong>3</strong><span>Ground source</span><small>Create and ingest</small></article>
-        <article><strong>4</strong><span>Generate</span><small>Role Intelligence</small></article>
-        <article><strong>5</strong><span>Review</span><small>Evidence, confidence, trace</small></article>
-        <article><strong>6</strong><span>Adopt</span><small>cURL and MCP</small></article>
-        <article><strong>7</strong><span>Cleanup</span><small>Delete demo source</small></article>
+        <article><strong>3</strong><span>Generate</span><small>Grounded intelligence</small></article>
+        <article><strong>4</strong><span>Review</span><small>Evidence and confidence</small></article>
+        <article><strong>5</strong><span>Trace</span><small>Explainability and cleanup</small></article>
       </section>
 
       <section class="panel checklist-panel" aria-labelledby="checklist-title">
         <div class="section-heading compact">
-          <p class="eyebrow">Demo readiness</p>
-          <h2 id="checklist-title">Confirmed success criteria</h2>
+          <p class="eyebrow">Demo progress</p>
+          <h2 id="checklist-title">Grounding workflow</h2>
         </div>
         <ul id="demo-checklist" class="demo-checklist"></ul>
       </section>
@@ -64,48 +62,48 @@
           <label>Paste or edit context<textarea id="context-text" rows="12" placeholder="Synthetic customer context appears here."></textarea></label>
           <label>Or upload PDF, DOCX, Markdown, or TXT<input id="context-file" type="file" accept=".pdf,.docx,.md,.markdown,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/markdown,text/plain"></label>
           <div class="button-row">
-            <button id="create-ingest" type="button">Create source and ingest</button>
-            <button id="load-offline-preview" type="button" class="secondary">Show offline preview</button>
+            <button id="create-ingest" type="button">Prepare grounded context</button>
+            <button id="load-offline-preview" type="button" class="secondary">Preview example</button>
           </div>
-          <div id="ingestion-status" class="status-box muted">No source ingested yet.</div>
+          <div id="ingestion-status" class="status-box muted">No customer context prepared yet.</div>
         </article>
 
         <article class="panel">
-          <p class="eyebrow">Step 3 - Generate grounded intelligence</p>
+          <p class="eyebrow">Step 3 - Define the request</p>
           <h2>Role request</h2>
           <label>Role title<input id="role-title" type="text" placeholder="Senior Payroll Specialist"></label>
           <label>Role context<textarea id="role-context" rows="6" placeholder="Describe the role, operating model, and decision context."></textarea></label>
-          <label>Business question<textarea id="business-question" rows="3" placeholder="What does the evaluator need to decide?"></textarea></label>
+          <label>Business question<textarea id="business-question" rows="3" placeholder="What decision should this analysis support?"></textarea></label>
           <label>Focus areas<input id="focus-areas" type="text" placeholder="payroll compliance, ADP Workforce Now, review guidance"></label>
           <details class="advanced-details">
-            <summary>Advanced source details</summary>
+            <summary>Technical context details</summary>
             <label>Source ID<input id="source-id" type="text" placeholder="Generated automatically or enter one intentionally"></label>
             <div class="button-row compact-buttons">
-              <button id="refresh-source" type="button" class="secondary">Refresh selected source</button>
+              <button id="refresh-source" type="button" class="secondary">Check context status</button>
             </div>
-            <div id="advanced-source-details" class="advanced-box">No source details yet.</div>
+            <div id="advanced-source-details" class="advanced-box">No context details yet.</div>
           </details>
           <div class="button-row">
-            <button id="generate-report" type="button">Generate grounded report</button>
-            <button id="fetch-usage" type="button" class="secondary">Fetch usage</button>
+            <button id="generate-report" type="button">Generate grounded intelligence</button>
+            <button id="fetch-usage" type="button" class="secondary">View account usage</button>
           </div>
-          <div id="generate-gate" class="gate-note blocked">Create and ingest a source before generating a grounded report.</div>
-          <div id="run-metadata" class="status-box muted">Live source and ingestion status will appear here.</div>
-          <div id="usage-view" class="status-box muted">Account usage appears here separately from source readiness.</div>
+          <div id="generate-gate" class="gate-note blocked">Prepare customer context before generating grounded intelligence.</div>
+          <div id="run-metadata" class="status-box muted">Context readiness will appear here.</div>
+          <div id="usage-view" class="status-box muted">Account usage appears here.</div>
         </article>
       </section>
 
       <section class="panel result-panel" aria-labelledby="result-title">
         <div class="section-heading">
-          <p class="eyebrow">Step 4 - Review grounded result</p>
+          <p class="eyebrow">Step 4 - Review the result</p>
           <h2 id="result-title">Grounded Role Intelligence</h2>
-          <p id="result-mode">Offline preview only until a live report is generated.</p>
+          <p id="result-mode">Select a sample to preview the expected result, then generate live grounded intelligence.</p>
         </div>
         <div id="grounding-alert" class="status-box muted" hidden></div>
         <div class="result-grid">
           <article class="summary-card"><h3>Executive summary</h3><p id="executive-summary">Select a sample to preview the kind of grounded output this app helps produce.</p></article>
-          <article class="summary-card"><h3>Confidence</h3><div id="confidence-card">No live confidence returned yet.</div></article>
-          <article class="summary-card"><h3>Grounding status</h3><div id="result-status-card">No live report generated yet.</div></article>
+          <article class="summary-card"><h3>Confidence</h3><div id="confidence-card">Confidence appears after generation.</div></article>
+          <article class="summary-card"><h3>Grounding status</h3><div id="result-status-card">No grounded result generated yet.</div></article>
         </div>
         <details class="advanced-details result-advanced">
           <summary>Advanced result IDs</summary>
@@ -113,7 +111,7 @@
         </details>
         <div class="comparison-grid">
           <article class="compare generic"><span>Generic answer</span><h3 id="generic-title">Broad role summary</h3><p id="generic-copy">Generic AI tends to describe the role without customer-specific operating constraints, evidence, or review flags.</p></article>
-          <article class="compare grounded"><span>Grounded answer</span><h3 id="grounded-title">Customer-context-aware answer</h3><p id="grounded-copy">A live report will use the selected grounded source and return evidence-backed criteria.</p></article>
+          <article class="compare grounded"><span>Grounded answer</span><h3 id="grounded-title">Customer-context-aware answer</h3><p id="grounded-copy">A grounded result uses the selected customer context and returns evidence-backed findings.</p></article>
         </div>
         <div class="grid two">
           <article><h3>Grounded findings</h3><div id="criteria-list" class="stack"></div></article>
@@ -124,11 +122,11 @@
 
       <section class="grid two" aria-label="Trace and cleanup">
         <article class="panel">
-          <p class="eyebrow">Step 5 - Explainability / trace</p>
-          <h2>Human-readable trace</h2>
-          <p>Fetch the persisted trace to show source-backed reasoning, confidence factors, uncertainty signals, and evidence snapshots without exposing raw prompts or secrets.</p>
-          <button id="fetch-trace" type="button">Fetch trace</button>
-          <div id="trace-view" class="status-box muted">No trace fetched yet.</div>
+          <p class="eyebrow">Step 5 - Review traceability</p>
+          <h2>Evidence and traceability</h2>
+          <p>Review how the result connects to customer context, evidence, confidence factors, uncertainty signals, and human-review guidance.</p>
+          <button id="fetch-trace" type="button">Review trace</button>
+          <div id="trace-view" class="status-box muted">No trace reviewed yet.</div>
           <details class="advanced-details">
             <summary>Advanced trace details</summary>
             <div id="advanced-trace-details" class="advanced-box">No trace IDs fetched yet.</div>
@@ -136,19 +134,19 @@
         </article>
 
         <article class="panel">
-          <p class="eyebrow">Step 7 - Cleanup</p>
-          <h2>Safe repeated demos</h2>
-          <p>Delete the demo source when done. Deleted sources are excluded from new retrieval and return safe tombstone metadata.</p>
-          <button id="cleanup-source" type="button" class="danger">Delete demo source</button>
-          <div id="cleanup-status" class="status-box muted">No cleanup action yet.</div>
+          <p class="eyebrow">Cleanup</p>
+          <h2>Remove demo data</h2>
+          <p>Remove the temporary customer context when the demo is complete. Deleted context is excluded from future results.</p>
+          <button id="cleanup-source" type="button" class="danger">Remove demo context</button>
+          <div id="cleanup-status" class="status-box muted">Demo context has not been removed.</div>
         </article>
       </section>
 
       <section class="panel adoption" aria-labelledby="adopt-title">
         <div class="section-heading">
-          <p class="eyebrow">Step 6 - Adopt</p>
-          <h2 id="adopt-title">Copyable API and MCP flow</h2>
-          <p>Snippets use placeholders and the exact Customer Grounding contracts found in the repository. Runtime API keys are not written to browser storage or committed files by this app.</p>
+          <p class="eyebrow">For developers</p>
+          <h2 id="adopt-title">Continue with API or MCP</h2>
+          <p>Use these examples to reproduce the same workflow through the Customer Grounding REST API or MCP tools. API keys are never included in the snippets.</p>
         </div>
         <div class="snippet-tabs" role="tablist">
           <button class="tab-button active" data-tab="curl-source" type="button">cURL source</button>
@@ -161,7 +159,7 @@
       </section>
 
       <footer class="caveat">
-        Controlled beta local demo app. Uses existing AvelinLabs Customer Grounding APIs when configured. Offline preview mode does not call AvelinLabs APIs. This is not a hosted production UI and not a final hiring decision tool.
+        Customer Grounding evaluation experience. Preview mode does not call AvelinLabs APIs. Generated results support human decisions and should not be treated as final hiring decisions.
       </footer>
     </main>
     <script src="app.js"></script>
