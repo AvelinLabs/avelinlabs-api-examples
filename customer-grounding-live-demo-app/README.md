@@ -50,8 +50,8 @@ Enter the following values in the Runtime connection panel:
 
 1. The API Base URL supplied for the evaluation.
 2. The Runtime API key supplied by AvelinLabs.
-3. Select Use key for session.
-4. Select Test capabilities.
+3. Select Save connection.
+4. Select Test connection.
 
 The dashboard is the standard customer and evaluator configuration path. No environment variable or local configuration file is required.
 
@@ -59,15 +59,15 @@ The key is kept only in the local server process memory. It is not written to re
 
 ## Recommended demo flow
 
-1. Connect and test capabilities.
+1. Save and test the connection.
 2. Select Payroll Operating Model.
 3. Review the prefilled Senior Payroll Specialist request.
-4. Select Create source and ingest.
-5. Wait until the dashboard confirms that the source is ready.
-6. Select Generate grounded report.
+4. Select Prepare grounded context.
+5. Wait until the dashboard confirms that the customer context is ready.
+6. Select Generate grounded intelligence.
 7. Review the summary, criteria, evidence, confidence, and review flags.
-8. Fetch the trace.
-9. Delete the demo source.
+8. Select Review trace.
+9. Select Remove demo context.
 
 ## Evidence gate
 
