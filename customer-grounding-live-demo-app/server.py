@@ -23,7 +23,7 @@ MAX_UPLOAD_BYTES = 5 * 1024 * 1024
 LOCAL_HOSTS = {"127.0.0.1", "localhost", "::1"}
 
 SESSION: dict[str, str] = {
-    "base_url": os.getenv("AVELIN_API_BASE", "http://127.0.0.1:8010").strip().rstrip("/"),
+    "base_url": os.getenv("AVELIN_API_BASE", "https://api.avelinlabs.com").strip().rstrip("/"),
     "api_key": os.getenv("AVELIN_RUNTIME_API_KEY", "").strip(),
 }
 
