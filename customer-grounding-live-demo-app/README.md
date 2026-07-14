@@ -16,20 +16,6 @@ It is an API-first and MCP-first adoption example. It is not a hosted production
 - Copyable REST and MCP adoption examples.
 - Safe cleanup of temporary demo sources.
 
-## Screenshots
-
-### Connected and ready
-
-The evaluator has configured the production API URL, entered the Runtime API key, and confirmed Customer Grounding availability.
-
-![Customer Grounding demo connected to the AvelinLabs API](docs/customer-grounding-connected.png)
-
-### Grounded result
-
-The completed workflow shows the grounded summary, findings, supporting evidence, confidence, review flags, traceability, and cleanup controls.
-
-![Completed Customer Grounding workflow with evidence and traceability](docs/customer-grounding-result.png)
-
 ## Prerequisites
 
 - Python 3.10 to 3.12.
