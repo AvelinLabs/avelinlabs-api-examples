@@ -1,0 +1,11 @@
+{
+  "scope": "last_30_days_vs_previous_30_days",
+  "skills": [
+    {
+      "skill_name": "Generative AI",
+      "growth_rate": 0.42,
+      "jobs_last_30_days": 2400,
+      "jobs_previous_30_days": 1690
+    }
+  ]
+}
