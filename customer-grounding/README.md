@@ -22,6 +22,8 @@ $env:AVELIN_API_KEY = "replace-with-your-runtime-api-key"
 
 Do not put raw keys in committed files.
 
+Current quotas, retained-document limits, and storage limits are maintained in the [public Customer Grounding documentation](https://avelinlabs.com/docs/customer-grounding/). This repository links to that source of truth instead of duplicating values that may evolve.
+
 ## Supported File Formats
 
 The current public file-ingestion route supports only:
