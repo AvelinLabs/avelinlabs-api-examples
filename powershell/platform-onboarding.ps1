@@ -1,15 +1,16 @@
 . "$PSScriptRoot/common.ps1"
 
 $email = if ($env:AVELIN_EMAIL) { $env:AVELIN_EMAIL } else { Read-Host "Email" }
-$fullName = if ($env:AVELIN_FULL_NAME) { $env:AVELIN_FULL_NAME } else { Read-Host "Full name" }
-$companyName = if ($env:AVELIN_COMPANY_NAME) { $env:AVELIN_COMPANY_NAME } else { Read-Host "Company name" }
 $securePassword = Read-Host "Password" -AsSecureString
 $credential = New-Object System.Management.Automation.PSCredential($email, $securePassword)
 $password = $credential.GetNetworkCredential().Password
+$managementToken = $null
 
 try {
     $register = Read-Host "Register this account now? [Y/n]"
     if ($register -notin @("n", "N", "no", "No")) {
+        $fullName = if ($env:AVELIN_FULL_NAME) { $env:AVELIN_FULL_NAME } else { Read-Host "Full name" }
+        $companyName = if ($env:AVELIN_COMPANY_NAME) { $env:AVELIN_COMPANY_NAME } else { Read-Host "Company name" }
         $registered = Invoke-AvelinApi -Method POST -Path "/api/v1/platform/register" -AuthRequired $false -Body @{
             email = $email
             password = $password
