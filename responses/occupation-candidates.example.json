@@ -1,0 +1,126 @@
+{
+  "query": {
+    "title": "Psychiatric Technician",
+    "description_used": true
+  },
+  "candidates": [
+    {
+      "rank": 1,
+      "onet_code": "29-2053.00",
+      "title": "Psychiatric Technicians",
+      "relevance_score": 2765.113,
+      "match_reasons": [
+        "normalized_primary_title_match",
+        "complete_occupational_phrase_match",
+        "primary_title_token_match",
+        "occupational_context_match",
+        "role_head_match",
+        "description_match",
+        "task_match",
+        "vector_candidate_expansion"
+      ],
+      "evidence": {
+        "matched_title": "Psychiatric Technicians",
+        "title_match_type": "primary",
+        "query_role_head": "technician",
+        "candidate_role_head": "technician",
+        "role_head_agreement": true,
+        "description_term_matches": 3,
+        "task_term_matches": 5
+      }
+    },
+    {
+      "rank": 2,
+      "onet_code": "31-1133.00",
+      "title": "Psychiatric Aides",
+      "relevance_score": 1145.312,
+      "match_reasons": [
+        "complete_occupational_phrase_match",
+        "alternate_title_token_match",
+        "occupational_context_match",
+        "description_match",
+        "task_match",
+        "vector_candidate_expansion"
+      ],
+      "evidence": {
+        "matched_title": "Psychiatric Technician Assistant (Psychiatric Tech Assistant)",
+        "title_match_type": "alternate",
+        "query_role_head": "technician",
+        "candidate_role_head": "assistant",
+        "role_head_agreement": false,
+        "description_term_matches": 1,
+        "task_term_matches": 3
+      }
+    },
+    {
+      "rank": 3,
+      "onet_code": "29-1223.00",
+      "title": "Psychiatrists",
+      "relevance_score": 823.379,
+      "match_reasons": [
+        "stemmed_title_match",
+        "task_match",
+        "vector_candidate_expansion"
+      ],
+      "evidence": {
+        "matched_title": "Psychiatrists",
+        "title_match_type": "primary",
+        "query_role_head": "technician",
+        "candidate_role_head": "psychiatrist",
+        "role_head_agreement": false,
+        "description_term_matches": 0,
+        "task_term_matches": 6
+      }
+    },
+    {
+      "rank": 4,
+      "onet_code": "29-1141.02",
+      "title": "Advanced Practice Psychiatric Nurses",
+      "relevance_score": 808.042,
+      "match_reasons": [
+        "alternate_title_token_match",
+        "occupational_context_match",
+        "description_match",
+        "task_match",
+        "vector_candidate_expansion"
+      ],
+      "evidence": {
+        "matched_title": "Psychiatric Nurse",
+        "title_match_type": "alternate",
+        "query_role_head": "technician",
+        "candidate_role_head": "nurse",
+        "role_head_agreement": false,
+        "description_term_matches": 1,
+        "task_term_matches": 5
+      }
+    },
+    {
+      "rank": 5,
+      "onet_code": "29-1141.04",
+      "title": "Clinical Nurse Specialists",
+      "relevance_score": 779.076,
+      "match_reasons": [
+        "alternate_title_token_match",
+        "occupational_context_match",
+        "description_match",
+        "task_match",
+        "vector_candidate_expansion"
+      ],
+      "evidence": {
+        "matched_title": "Psychiatric Clinical Nurse Specialist (Psychiatric CNS)",
+        "title_match_type": "alternate",
+        "query_role_head": "technician",
+        "candidate_role_head": "specialist",
+        "role_head_agreement": false,
+        "description_term_matches": 4,
+        "task_term_matches": 6
+      }
+    }
+  ],
+  "decision": "candidates_only",
+  "mapping_selected": false,
+  "taxonomy_version": "30.3",
+  "policy": "avelin-onet-hybrid-shortlist-30.3-v1",
+  "score_interpretation": "ordering_only_not_probability",
+  "attribution": "O*NET Resource Center; U.S. Department of Labor/Employment and Training Administration"
+}

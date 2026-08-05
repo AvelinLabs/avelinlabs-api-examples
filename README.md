@@ -82,6 +82,7 @@ The examples cover documented public product and health surfaces:
 
 - `POST /api/v1/job/analyze`
 - `POST /api/v1/job/classify`
+- `POST /api/v1/occupation/candidates`
 - `GET /api/v1/occupation/{onet_code}`
 - `GET /api/v1/occupation/profile/{onet_code}`
 - `GET /api/v1/market/top`
@@ -105,6 +106,7 @@ export AVELIN_API_KEY="replace-with-your-key"
 
 bash curl/job-analyze.sh
 bash curl/job-classify.sh
+bash curl/occupation-candidates.sh
 bash curl/occupation-profile.sh
 bash curl/market-top-us-technology.sh
 bash curl/health-ready.sh
@@ -130,6 +132,7 @@ set AVELIN_API_KEY=replace-with-your-key
 python python/job_analyze.py
 python python/job_analyze_summary.py
 python python/job_classify.py
+python python/occupation_candidates.py
 python python/occupation_profile.py
 python python/market_top.py
 python python/health_ready.py
@@ -147,6 +150,7 @@ Current payloads:
 - `job-analyze.json`
 - `job-classify.json`
 - `hr-service-role-intake.json`
+- `occupation-candidates.json`
 
 Customer Grounding request examples are stored under
 `customer-grounding/requests/` because that API surface has multipart file
@@ -163,6 +167,12 @@ The request schema for `job/analyze` and `job/classify` is documented as:
 Sample responses are stored under `responses/`.
 
 Some responses are copied from or closely aligned to backend documentation. Others are conservative illustrative examples where the docs describe the response concept but not an exact payload. Illustrative files include a `"_note"` field so they are not mistaken for guaranteed response contracts.
+
+`responses/occupation-candidates.example.json` was produced through the current
+local application service and public serializer with the governed hybrid
+resources active. Its candidates are suggestions: rank 1 is not an official
+mapping, `mapping_selected` remains `false`, and `relevance_score` orders only
+within that response. The endpoint does not persist a mapping.
 
 ## Response Interpretation
 
@@ -192,6 +202,7 @@ Configure these collection variables before use:
 - Do not treat these examples as finalized API contracts.
 - Public `/api/v1/*` paths are documented under additive-only governance for v0.1.
 - Current occupation intelligence is grounded in O*NET 30.3. Market `technology` examples use the public API category name and may represent software-oriented terms in the current reference model.
+- Occupation candidate policy identifies the active hybrid path or the exact lexical fallback; it is operational context, not a correctness signal.
 - Confidence-like fields are not all calibrated probabilities.
 - Public product endpoints require customer runtime API keys.
 - Management endpoints use management bearer tokens from login and are intentionally not expanded here yet.
