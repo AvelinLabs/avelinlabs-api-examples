@@ -41,12 +41,12 @@ def required(name: str, prompt: str) -> str:
 
 def main() -> None:
     email = required("AVELIN_EMAIL", "Email: ")
-    full_name = required("AVELIN_FULL_NAME", "Full name: ")
-    company_name = required("AVELIN_COMPANY_NAME", "Company name: ")
     password = os.environ.get("AVELIN_PASSWORD") or getpass.getpass("Password: ")
 
     register = input("Register this account now? [Y/n]: ").strip().lower() not in {"n", "no"}
     if register:
+        full_name = required("AVELIN_FULL_NAME", "Full name: ")
+        company_name = required("AVELIN_COMPANY_NAME", "Company name: ")
         result = call(
             "POST",
             "/api/v1/platform/register",
