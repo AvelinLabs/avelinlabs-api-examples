@@ -64,6 +64,23 @@
       }
     },
     {
+      "name": "Occupation Candidates",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/v1/occupation/candidates",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Psychiatric Technician\",\n  \"description\": \"Provides direct care and observes patients in a behavioral health setting.\",\n  \"limit\": 5\n}"
+        }
+      }
+    },
+    {
       "name": "Occupation",
       "request": {
         "method": "GET",
