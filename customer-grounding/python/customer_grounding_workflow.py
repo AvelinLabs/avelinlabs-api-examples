@@ -92,7 +92,9 @@ def run_workflow() -> None:
 
         register_payload = load_json(REQUESTS_DIR / "register-source.json")
         register_payload["source_id"] = source_id
-        register_result = client.request("POST", "/api/v1/grounding/sources", json_payload=register_payload)\n    registered = True\n    print_json("register source", register_result)
+        register_result = client.request("POST", "/api/v1/grounding/sources", json_payload=register_payload)
+        registered = True
+        print_json("register source", register_result)
         print_json("list sources", client.request("GET", "/api/v1/grounding/sources"))
         print_json("get source", client.request("GET", f"/api/v1/grounding/sources/{source_id}"))
 
