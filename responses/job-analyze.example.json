@@ -1,7 +1,6 @@
 {
-  "_note": "Illustrative example based on backend/docs/api_contract_v1.md. Response fields may evolve additively during beta.",
   "job_title": "Data Analyst",
-  "model_version": "skillvista-hybrid-ce-v2",
+  "model_version": "<runtime-model-version>",
   "confidence": 0.88,
   "confidence_raw": 0.81,
   "trust_score": 0.84,
@@ -72,8 +71,8 @@
       "skills": [
         {
           "skill_name": "Data Analysis",
-          "importance": 93.0,
-          "level": 81.0
+          "importance": 93,
+          "level": 81
         }
       ],
       "knowledge": [
