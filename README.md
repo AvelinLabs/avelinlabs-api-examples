@@ -99,6 +99,31 @@ Authorization: Bearer <runtime-api-key>
 
 `GET /health/live` and `GET /health/ready` are public and anonymous.
 
+## Endpoint guide
+
+The explanations are centralized here so the Bash/cURL, PowerShell, Command Prompt, Python, and Postman variants can stay small and consistent.
+
+| Endpoint | What it provides | Authentication | Important fields, limits, and behavior |
+| --- | --- | --- | --- |
+| `POST /api/v1/platform/register` | Creates a self-service beta account and starts email verification. | None | `email` and `password` are required; `full_name` and `company_name` are optional. This is an account mutation, not a smoke-test endpoint. |
+| `GET /api/v1/platform/verify-email` | Verifies the account from the emailed token. | None | `token` is required in the query string. Verification tokens are credentials and must not be logged or committed. |
+| `POST /api/v1/platform/login` | Returns a management bearer token for account and key management. | None | Requires `email` and `password`. The returned token is not accepted by Runtime product endpoints. |
+| `POST /api/v1/platform/api-keys/create` | Creates a Runtime API Key. | Management bearer token | `name` is required; `expires_at` is optional. The raw key is returned once and must be copied to secure storage. |
+| `POST /api/v1/job/analyze` | Returns ranked O*NET results with decision-support, confidence, uncertainty, signals, and explanations. | Runtime API Key | `title` is required (1-500 characters); `description` is optional (up to 20,000); `debug` defaults to `false`. Confidence, Trust Score, and uncertainty have different meanings. |
+| `POST /api/v1/job/classify` | Returns the compact top occupation classification and review signals. | Runtime API Key | Uses the same request as analyze. Key output fields include `occupation`, `confidence`, `task_type`, `job_signals`, `is_ambiguous`, and `confidence_level`. |
+| `POST /api/v1/occupation/candidates` | Returns a deterministic, explainable shortlist of plausible O*NET occupations. | Runtime API Key | `title` is required; `description` is optional; `limit` is 1-10 and defaults to 5. The supplied fixture requests and illustrates five candidates. `relevance_score` only orders this response: the endpoint does not classify, select, persist, or invoke OpenAI. |
+| `GET /api/v1/occupation/{onet_code}` | Returns a compact O*NET occupation summary. | Runtime API Key | `onet_code` is a path value such as `15-1252.00`; the response contains the code, title, and top skills. |
+| `GET /api/v1/occupation/profile/{onet_code}` | Returns the fuller occupation profile. | Runtime API Key | The response groups `occupation`, `skills`, `technologies`, `tasks`, and `related_occupations`. It is read-only reference data. |
+| `GET /api/v1/market/top` | Returns top market terms for a selected evidence type and scope. | Runtime API Key | `type` is required: `technology`, `skill`, `ability`, `knowledge`, or `work_activity`. `scope` is `active` or `historical`; `limit` is 1-100 and defaults to 20; `country` is optional. |
+| `GET /api/v1/market/skills/trending` | Returns skill growth for the latest 30 days versus the preceding 30 days. | Runtime API Key | `limit` is 1-100 and defaults to 20. Counts and `growth_rate` are scoped market signals, not universal totals. |
+| `GET /api/v1/market/technologies/trending` | Returns technology growth for the same adjacent 30-day windows. | Runtime API Key | `limit` is 1-100 and defaults to 20. A bootstrap value can occur when the current window has demand and the previous window has none. |
+| `GET /api/v1/market/overview` | Returns one compact view of top skills, technologies, and country remote-rate rows. | Runtime API Key | The current OpenAPI request has no query parameters. Interpret all counts and percentages within the returned `scope`. |
+| `GET /api/v1/market/remote-rate` | Returns country-level remote job counts and rates. | Runtime API Key | The response contains `countries`; each row includes `country_code`, `remote_rate`, `remote_jobs`, and `total_jobs`. |
+| `GET /health/live` | Confirms public process liveness. | None | The current PROD payload is intentionally minimal: `{"status":"ok"}`. It does not prove authenticated product behavior. |
+| `GET /health/ready` | Confirms readiness to receive traffic. | None | The current PROD payload is `{"status":"ready"}`. It does not expose dependency topology. |
+
+Customer Grounding endpoint details are kept with its representative lifecycle in `customer-grounding/README.md`.
+
 ## Coverage
 
 | Area | Python | Bash/cURL | PowerShell/CMD | Postman |
@@ -110,7 +135,7 @@ Authorization: Bearer <runtime-api-key>
 | Market skill/technology trends | yes | yes | native PowerShell and CMD wrappers | yes |
 | Market remote rate | yes | yes | native PowerShell and CMD wrapper | yes |
 | Health live/ready | yes | yes | native PowerShell and CMD wrappers | yes |
-| Customer Grounding | full lifecycle | full lifecycle | Python workflow runs from both Windows shells | lifecycle collection |
+| Customer Grounding | representative lifecycle | representative lifecycle | Python workflow runs from both Windows shells | representative lifecycle collection |
 | Standard 401 error | executable | response fixture | executable through Python | tested request |
 
 ## Runtime examples
@@ -163,6 +188,8 @@ Executable payloads are under `input-quality/`:
 
 Use them to inspect confidence, uncertainty, ambiguity, weak-signal detection, decision routing, skills, and explanations. Do not expect fixed numerical confidence values.
 
+`python/input_quality.py` sends five distinct `job/analyze` requests. Runtime usage limits apply. The current backend can optionally enable OpenAI-backed normalization or quality evaluation for `job/analyze` and `job/classify`, so those calls may create provider cost when that behavior is enabled. The occupation candidate endpoint explicitly does not invoke OpenAI.
+
 ## Error handling
 
 Run the standard invalid-key example:
@@ -176,6 +203,7 @@ It verifies HTTP `401` and the public error envelope fields:
 - `detail`
 - `request_id`
 - `status_code`
+- `error_code`
 
 The Postman collection contains the equivalent test.
 
@@ -210,12 +238,7 @@ Both workflows perform best-effort cleanup if a later request fails. Current quo
 
 Response fixtures are stored under `responses/`. Read `responses/README.md` before using them.
 
-Illustrative fixtures:
-
-- are not guaranteed production snapshots;
-- use placeholders where a runtime value should not be invented;
-- contain only response fields, not repository metadata such as `_note`;
-- should be validated against the public OpenAPI contract.
+`responses/README.md` classifies each saved payload as sanitized live output, a sanitized fixture derived from live behavior, or an illustrative output fixture. Illustrative values are never presented as production observations, and provenance metadata is kept outside response JSON.
 
 `AUTO_ACCEPT` is a routing signal for low-risk workflow handling where customer policy permits it. It is not a final hiring decision.
 

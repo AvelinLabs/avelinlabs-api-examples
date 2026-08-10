@@ -1,5 +1,4 @@
 {
-  "_note": "The same response shape is used for supported text, Markdown, PDF, and DOCX uploads. Parser version varies by format.",
   "source_version": {
     "source_version_id": "srcver_synthetic_docx_001",
     "source_id": "synthetic-role-criteria",

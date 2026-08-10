@@ -20,7 +20,7 @@ def main() -> None:
     if response.status_code != 401:
         raise SystemExit(f"Expected HTTP 401, received {response.status_code}.")
     body = response.json()
-    for field in ("detail", "request_id", "status_code"):
+    for field in ("detail", "request_id", "status_code", "error_code"):
         if field not in body:
             raise SystemExit(f"Expected error field missing: {field}")
     print_json(body)

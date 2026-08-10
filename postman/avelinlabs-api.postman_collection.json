@@ -298,7 +298,9 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
-                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Candidate-only contract\", function () { pm.expect(body).to.include.all.keys(\"query\", \"candidates\", \"decision\", \"mapping_selected\", \"taxonomy_version\", \"policy\", \"score_interpretation\", \"attribution\"); pm.expect(body.decision).to.eql(\"candidates_only\"); pm.expect(body.mapping_selected).to.eql(false); pm.expect(body.score_interpretation).to.eql(\"ordering_only_not_probability\"); pm.expect(body.candidates).to.be.an(\"array\").with.lengthOf.at.most(5); });"
                 ]
               }
             }
@@ -482,7 +484,8 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
-                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });",
+                  "pm.test(\"Current liveness shape\", function () { pm.expect(pm.response.json()).to.deep.equal({ status: \"ok\" }); });"
                 ]
               }
             }
@@ -505,7 +508,8 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
-                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });",
+                  "pm.test(\"Current readiness shape\", function () { pm.expect(pm.response.json()).to.deep.equal({ status: \"ready\" }); });"
                 ]
               }
             }
@@ -718,7 +722,7 @@
                 "exec": [
                   "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });",
                   "const body = pm.response.json();",
-                  "pm.test(\"Standard error fields\", function () { pm.expect(body).to.have.all.keys(\"detail\", \"request_id\", \"status_code\"); });"
+                  "pm.test(\"Standard error fields\", function () { pm.expect(body).to.include.all.keys(\"detail\", \"request_id\", \"status_code\", \"error_code\"); });"
                 ]
               }
             }

@@ -6,6 +6,8 @@
   "confidence": 0.88,
   "trust_score": 0.82,
   "confidence_level": "HIGH",
+  "task_type": "SUPPORT",
+  "is_ambiguous": false,
   "uncertainty": {
     "total": 0.18
   },

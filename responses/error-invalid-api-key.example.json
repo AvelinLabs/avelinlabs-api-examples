@@ -1,5 +1,6 @@
 {
   "detail": "Invalid API key",
   "request_id": "ab12cd34",
-  "status_code": 401
+  "status_code": 401,
+  "error_code": "invalid_api_key"
 }
