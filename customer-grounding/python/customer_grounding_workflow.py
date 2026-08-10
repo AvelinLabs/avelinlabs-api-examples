@@ -85,64 +85,74 @@ class GroundingClient:
 def run_workflow() -> None:
     client = GroundingClient()
     source_id = os.environ.get("SOURCE_ID", f"synthetic-role-criteria-{os.getpid()}")
+    registered = False
 
-    print_json("capabilities", client.request("GET", "/api/v1/grounding/capabilities"))
+    try:
+        print_json("capabilities", client.request("GET", "/api/v1/grounding/capabilities"))
 
-    register_payload = load_json(REQUESTS_DIR / "register-source.json")
-    register_payload["source_id"] = source_id
-    print_json("register source", client.request("POST", "/api/v1/grounding/sources", json_payload=register_payload))
-    print_json("list sources", client.request("GET", "/api/v1/grounding/sources"))
-    print_json("get source", client.request("GET", f"/api/v1/grounding/sources/{source_id}"))
+        register_payload = load_json(REQUESTS_DIR / "register-source.json")
+        register_payload["source_id"] = source_id
+        register_result = client.request("POST", "/api/v1/grounding/sources", json_payload=register_payload)
+        registered = True
+        print_json("register source", register_result)
+        print_json("list sources", client.request("GET", "/api/v1/grounding/sources"))
+        print_json("get source", client.request("GET", f"/api/v1/grounding/sources/{source_id}"))
 
-    text_result = client.request(
-        "POST",
-        f"/api/v1/grounding/sources/{source_id}/ingest-text",
-        json_payload=load_json(REQUESTS_DIR / "ingest-text.json"),
-    )
-    print_json("ingest text", text_result)
+        text_result = client.request(
+            "POST",
+            f"/api/v1/grounding/sources/{source_id}/ingest-text",
+            json_payload=load_json(REQUESTS_DIR / "ingest-text.json"),
+        )
+        print_json("ingest text", text_result)
 
-    file_specs = [
-        ("synthetic-role-criteria.txt", "text/plain", "synthetic-txt-v1"),
-        ("synthetic-role-criteria.md", "text/markdown", "synthetic-md-v1"),
-        ("synthetic-role-criteria.pdf", "application/pdf", "synthetic-pdf-v1"),
-        (
-            "synthetic-role-criteria.docx",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "synthetic-docx-v1",
-        ),
-    ]
-    for filename, media_type, version_label in file_specs:
-        print_json(f"ingest file {filename}", client.upload_file(source_id, filename, media_type, version_label))
+        file_specs = [
+            ("synthetic-role-criteria.txt", "text/plain", "synthetic-txt-v1"),
+            ("synthetic-role-criteria.md", "text/markdown", "synthetic-md-v1"),
+            ("synthetic-role-criteria.pdf", "application/pdf", "synthetic-pdf-v1"),
+            (
+                "synthetic-role-criteria.docx",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "synthetic-docx-v1",
+            ),
+        ]
+        for filename, media_type, version_label in file_specs:
+            print_json(f"ingest file {filename}", client.upload_file(source_id, filename, media_type, version_label))
 
-    print_json("list versions", client.request("GET", f"/api/v1/grounding/sources/{source_id}/versions"))
-    print_json("list artifacts", client.request("GET", f"/api/v1/grounding/sources/{source_id}/artifacts"))
+        print_json("list versions", client.request("GET", f"/api/v1/grounding/sources/{source_id}/versions"))
+        print_json("list artifacts", client.request("GET", f"/api/v1/grounding/sources/{source_id}/artifacts"))
 
-    ingestion_run_id = text_result["ingestion_run"]["ingestion_run_id"]
-    print_json("get ingestion run", client.request("GET", f"/api/v1/grounding/ingestion-runs/{ingestion_run_id}"))
+        ingestion_run_id = text_result["ingestion_run"]["ingestion_run_id"]
+        print_json("get ingestion run", client.request("GET", f"/api/v1/grounding/ingestion-runs/{ingestion_run_id}"))
 
-    report = client.request(
-        "POST",
-        "/api/v1/grounding/role-intelligence/reports",
-        json_payload=load_json(REQUESTS_DIR / "role-intelligence-report.json"),
-    )
-    print_json("generate report", report)
+        report = client.request(
+            "POST",
+            "/api/v1/grounding/role-intelligence/reports",
+            json_payload=load_json(REQUESTS_DIR / "role-intelligence-report.json"),
+        )
+        print_json("generate report", report)
 
-    trace_id = report["trace_id"]
-    print_json("get trace", client.request("GET", f"/api/v1/grounding/traces/{trace_id}"))
-    print_json("disable source", client.request("POST", f"/api/v1/grounding/sources/{source_id}/disable", json_payload={}))
-    print_json("enable source", client.request("POST", f"/api/v1/grounding/sources/{source_id}/enable", json_payload={}))
+        trace_id = report["trace_id"]
+        print_json("get trace", client.request("GET", f"/api/v1/grounding/traces/{trace_id}"))
+        print_json("disable source", client.request("POST", f"/api/v1/grounding/sources/{source_id}/disable", json_payload={}))
+        print_json("enable source", client.request("POST", f"/api/v1/grounding/sources/{source_id}/enable", json_payload={}))
 
-    if os.environ.get("RUN_NEGATIVE_CASES") == "1":
-        run_negative_examples(client, source_id)
+        if os.environ.get("RUN_NEGATIVE_CASES") == "1":
+            run_negative_examples(client, source_id)
+    finally:
+        if registered:
+            try:
+                print_json(
+                    "delete source",
+                    client.request(
+                        "DELETE",
+                        f"/api/v1/grounding/sources/{source_id}",
+                        json_payload=load_json(REQUESTS_DIR / "delete-source.json"),
+                    ),
+                )
+            except requests.RequestException as exc:
+                print(f"Cleanup failed for source {source_id}: {exc}")
+        client.session.close()
 
-    print_json(
-        "delete source",
-        client.request(
-            "DELETE",
-            f"/api/v1/grounding/sources/{source_id}",
-            json_payload=load_json(REQUESTS_DIR / "delete-source.json"),
-        ),
-    )
 
 
 def run_negative_examples(client: GroundingClient, source_id: str) -> None:

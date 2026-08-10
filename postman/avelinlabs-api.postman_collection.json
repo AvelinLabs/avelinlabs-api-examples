@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "Avelinlabs API Examples",
-    "description": "Beta / early access examples aligned with the public API documentation. API surfaces may evolve. Configure base_url and avelin_api_key collection variables before use.",
+    "name": "AvelinLabs API Examples",
+    "description": "Executable public-beta collection. Runtime requests use Authorization: Bearer {{avelin_api_key}}. Management tokens are used only for Platform account and key-management operations. Raw Runtime API Keys are never stored automatically.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -11,11 +11,43 @@
     },
     {
       "key": "avelin_api_key",
-      "value": "replace-with-your-key"
+      "value": "replace-with-your-runtime-api-key"
+    },
+    {
+      "key": "management_token",
+      "value": ""
+    },
+    {
+      "key": "verification_token",
+      "value": ""
+    },
+    {
+      "key": "email",
+      "value": "developer@example.com"
+    },
+    {
+      "key": "password",
+      "value": "ChangeMe123!"
+    },
+    {
+      "key": "full_name",
+      "value": "Alex Morgan"
+    },
+    {
+      "key": "company_name",
+      "value": "Example Company"
     },
     {
       "key": "onet_code",
       "value": "15-1252.00"
+    },
+    {
+      "key": "source_id",
+      "value": "synthetic-postman-role-criteria"
+    },
+    {
+      "key": "trace_id",
+      "value": ""
     }
   ],
   "auth": {
@@ -30,93 +62,702 @@
   },
   "item": [
     {
-      "name": "Job Analyze",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
+      "name": "Platform onboarding",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/v1/platform/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\",\n  \"full_name\": \"{{full_name}}\",\n  \"company_name\": \"{{company_name}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
           }
-        ],
-        "url": "{{base_url}}/api/v1/job/analyze",
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"title\": \"Data Analyst\",\n  \"description\": \"Build SQL dashboards, analyze business metrics, create reports in Power BI, and communicate insights to stakeholders.\",\n  \"debug\": false\n}"
+        },
+        {
+          "name": "Verify Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/platform/verify-email?token={{verification_token}}"
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Management token returned\", function () { pm.expect(body.access_token).to.be.a(\"string\").and.not.empty; });",
+                  "pm.collectionVariables.set(\"management_token\", body.access_token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/v1/platform/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Runtime API Key",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"One-time Runtime API Key returned\", function () { pm.expect(body.raw_api_key).to.be.a(\"string\").and.not.empty; });",
+                  "console.warn(\"Copy raw_api_key into a secure Postman environment. It is intentionally not stored automatically.\");"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{management_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/v1/platform/api-keys/create",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"postman-local-development\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
         }
-      }
+      ]
     },
     {
-      "name": "Job Classify",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
+      "name": "Job",
+      "item": [
+        {
+          "name": "Analyze",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/v1/job/analyze",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Data Analyst\",\n  \"description\": \"Build SQL dashboards, analyze business metrics, create reports in Power BI, and communicate insights to stakeholders.\",\n  \"debug\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
           }
-        ],
-        "url": "{{base_url}}/api/v1/job/classify",
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"title\": \"Help Desk Technician\",\n  \"description\": \"Resolve user support issues, troubleshoot hardware and software problems, document incidents, and escalate complex tickets.\",\n  \"debug\": false\n}"
-        }
-      }
-    },
-    {
-      "name": "Occupation Candidates",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
+        },
+        {
+          "name": "Classify",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/v1/job/classify",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Help Desk Technician\",\n  \"description\": \"Resolve user support issues, troubleshoot hardware and software problems, document incidents, and escalate complex tickets.\",\n  \"debug\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
           }
-        ],
-        "url": "{{base_url}}/api/v1/occupation/candidates",
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"title\": \"Psychiatric Technician\",\n  \"description\": \"Provides direct care and observes patients in a behavioral health setting.\",\n  \"limit\": 5\n}"
         }
-      }
+      ]
     },
     {
       "name": "Occupation",
-      "request": {
-        "method": "GET",
-        "url": "{{base_url}}/api/v1/occupation/{{onet_code}}"
-      }
-    },
-    {
-      "name": "Occupation Profile",
-      "request": {
-        "method": "GET",
-        "url": "{{base_url}}/api/v1/occupation/profile/{{onet_code}}"
-      }
-    },
-    {
-      "name": "Market Top US Technology",
-      "request": {
-        "method": "GET",
-        "url": "{{base_url}}/api/v1/market/top?type=technology&scope=active&country=US&limit=5"
-      }
-    },
-    {
-      "name": "Market Overview",
-      "request": {
-        "method": "GET",
-        "url": "{{base_url}}/api/v1/market/overview"
-      }
-    },
-    {
-      "name": "Health Ready",
-      "request": {
-        "auth": {
-          "type": "noauth"
+      "item": [
+        {
+          "name": "Candidates",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Candidate-only contract\", function () { pm.expect(body).to.include.all.keys(\"query\", \"candidates\", \"decision\", \"mapping_selected\", \"taxonomy_version\", \"policy\", \"score_interpretation\", \"attribution\"); pm.expect(body.decision).to.eql(\"candidates_only\"); pm.expect(body.mapping_selected).to.eql(false); pm.expect(body.score_interpretation).to.eql(\"ordering_only_not_probability\"); pm.expect(body.candidates).to.be.an(\"array\").with.lengthOf.at.most(5); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/v1/occupation/candidates",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Psychiatric Technician\",\n  \"description\": \"Provides direct care and observes patients in a behavioral health setting.\",\n  \"limit\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
         },
-        "method": "GET",
-        "url": "{{base_url}}/health/ready"
-      }
+        {
+          "name": "Summary",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/occupation/{{onet_code}}"
+          }
+        },
+        {
+          "name": "Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/occupation/profile/{{onet_code}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Market",
+      "item": [
+        {
+          "name": "Top US Technology",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/market/top?type=technology&scope=active&country=US&limit=5"
+          }
+        },
+        {
+          "name": "Overview",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/market/overview"
+          }
+        },
+        {
+          "name": "Trending Skills",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/market/skills/trending?limit=20"
+          }
+        },
+        {
+          "name": "Trending Technologies",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/market/technologies/trending?limit=20"
+          }
+        },
+        {
+          "name": "Remote Rate",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/market/remote-rate"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Live",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });",
+                  "pm.test(\"Current liveness shape\", function () { pm.expect(pm.response.json()).to.deep.equal({ status: \"ok\" }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/health/live"
+          }
+        },
+        {
+          "name": "Ready",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });",
+                  "pm.test(\"Current readiness shape\", function () { pm.expect(pm.response.json()).to.deep.equal({ status: \"ready\" }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/health/ready"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customer Grounding",
+      "item": [
+        {
+          "name": "Capabilities",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/grounding/capabilities"
+          }
+        },
+        {
+          "name": "Register Source",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/v1/grounding/sources",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source_id\": \"{{source_id}}\",\n  \"source_type\": \"customer_text\",\n  \"title\": \"Synthetic Postman Role Criteria\",\n  \"owner\": \"example\",\n  \"permissions_scope\": \"customer_private\",\n  \"retention_class\": \"short_lived\",\n  \"metadata\": {\n    \"example\": \"postman\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Ingest Text",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/v1/grounding/sources/{{source_id}}/ingest-text",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content_type\": \"text/markdown\",\n  \"version_label\": \"postman-text-v1\",\n  \"text\": \"# Senior Analyst Criteria\\\\n\\\\nSenior analysts translate ambiguous needs into decision-ready requirements and maintain traceable evidence.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Generate Role Intelligence Report",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Trace id returned\", function () { pm.expect(body.trace_id).to.be.a(\"string\").and.not.empty; });",
+                  "pm.collectionVariables.set(\"trace_id\", body.trace_id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/v1/grounding/role-intelligence/reports",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role_title\": \"Senior Analyst\",\n  \"role_context\": \"The role supports advisory clients with intake clarification, requirements workshops, SQL analysis, and evidence-backed review guidance.\",\n  \"focus_areas\": [\n    \"requirements clarity\",\n    \"stakeholder communication\",\n    \"evidence review\"\n  ],\n  \"top_k\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Trace",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/grounding/traces/{{trace_id}}"
+          }
+        },
+        {
+          "name": "Delete Source",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/v1/grounding/sources/{{source_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Postman example cleanup\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Errors",
+      "item": [
+        {
+          "name": "Invalid Runtime API Key",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Standard error fields\", function () { pm.expect(body).to.include.all.keys(\"detail\", \"request_id\", \"status_code\", \"error_code\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "intentionally-invalid-example-key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/v1/job/classify",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Help Desk Technician\",\n  \"description\": \"Troubleshoot user hardware and software issues.\",\n  \"debug\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   ]
 }

@@ -7,21 +7,32 @@ BASE_URL="${BASE_URL:-https://api.avelinlabs.com}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 EXAMPLE_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 SOURCE_ID="${SOURCE_ID:-synthetic-role-criteria-$(date +%s)}"
+REGISTER_PAYLOAD="${REGISTER_PAYLOAD}"
+SOURCE_REGISTERED=0
 
 api() {
-  curl -sS "$@" -H "Authorization: Bearer ${AVELIN_API_KEY}" -H "Accept: application/json"
+  curl --fail-with-body -sS "$@" -H "Authorization: Bearer ${AVELIN_API_KEY}" -H "Accept: application/json"
 }
 
 json_api() {
   api "$@" -H "Content-Type: application/json"
 }
 
+cleanup() {
+  rm -f "${REGISTER_PAYLOAD}"
+  if [[ "${SOURCE_REGISTERED}" == "1" ]]; then
+    json_api -X DELETE "${BASE_URL}/api/v1/grounding/sources/${SOURCE_ID}" \
+      --data-binary "@${EXAMPLE_ROOT}/requests/delete-source.json" >/dev/null 2>&1 || true
+  fi
+}
+trap cleanup EXIT
+
 echo "Capabilities"
 api "${BASE_URL}/api/v1/grounding/capabilities"
 echo
 
 echo "Register source: ${SOURCE_ID}"
-python - "$EXAMPLE_ROOT/requests/register-source.json" "$SOURCE_ID" <<'PY' > "${EXAMPLE_ROOT}/.register-source.generated.json"
+python - "$EXAMPLE_ROOT/requests/register-source.json" "$SOURCE_ID" <<'PY' > "${REGISTER_PAYLOAD}"
 import json
 import sys
 path, source_id = sys.argv[1], sys.argv[2]
@@ -100,6 +111,5 @@ echo
 
 echo "Delete source"
 json_api -X DELETE "${BASE_URL}/api/v1/grounding/sources/${SOURCE_ID}" --data-binary "@${EXAMPLE_ROOT}/requests/delete-source.json"
+SOURCE_REGISTERED=0
 echo
-
-rm -f "${EXAMPLE_ROOT}/.register-source.generated.json"

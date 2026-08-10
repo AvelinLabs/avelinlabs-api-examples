@@ -1,0 +1,11 @@
+{
+  "scope": "active",
+  "countries": [
+    {
+      "country_code": "US",
+      "remote_rate": 0.18,
+      "remote_jobs": 90000,
+      "total_jobs": 500000
+    }
+  ]
+}

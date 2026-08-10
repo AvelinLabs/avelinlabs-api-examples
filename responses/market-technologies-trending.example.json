@@ -1,0 +1,11 @@
+{
+  "scope": "last_30_days_vs_previous_30_days",
+  "technologies": [
+    {
+      "technology_name": "AWS",
+      "growth_rate": 0.35,
+      "jobs_last_30_days": 1800,
+      "jobs_previous_30_days": 1335
+    }
+  ]
+}
