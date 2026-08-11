@@ -1,8 +1,13 @@
 {
-  "trace_id": "trace_synthetic_001",
+  "trace_id": "trace_rg_synthetic_001",
+  "draft": {
+    "decision_quality": "synthetic",
+    "generated_at": "2026-07-12T12:03:00+00:00",
+    "purpose": "tenant-scoped role intelligence with Decision Passport"
+  },
   "report": {
     "role_title": "Senior Analyst",
-    "grounded_summary": "Synthetic grounded summary based on tenant-scoped Customer Grounding evidence, with synthetic Decision Passport details.",
+    "grounded_summary": "Synthetic grounded summary based on tenant-scoped Customer Grounding evidence.",
     "key_role_criteria": [
       {
         "text": "Clarify ambiguous client requirements and maintain traceable review evidence.",
@@ -45,43 +50,39 @@
     },
     "review_flags": [
       "human_review_recommended"
+    ]
+  },
+  "trace": {
+    "trace_id": "trace_rg_synthetic_001",
+    "decision_id": "decision_rg_synthetic_001",
+    "decision_type": "customer_grounded_role_intelligence",
+    "access_channel": "customer_api",
+    "evidence_ids": [
+      "evidence_synthetic_001"
     ],
-    "decision_passport": {
-      "passport_level": 1,
-      "references": [
-        {
-          "reference_id": "prf_9f2d6a1b",
-          "reference_type": "synthetic",
-          "reference_scope": "customer_private",
-          "evidence_ids": [
-            "evidence_synthetic_001"
-          ],
-          "source_ids": [
-            "synthetic-role-criteria"
-          ],
-          "artifact_ids": [
-            "artifact_synthetic_001"
-          ],
-          "opaque_locator": "urn:opaque:7a9c8e3d"
-        },
-        {
-          "reference_id": "prf_b8a72f4c",
-          "reference_type": "trace_hint",
-          "reference_scope": "customer_private",
-          "evidence_ids": [
-            "evidence_synthetic_001"
-          ],
-          "source_ids": [
-            "synthetic-role-criteria"
-          ],
-          "artifact_ids": [
-            "artifact_synthetic_001"
-          ],
-          "opaque_locator": "urn:opaque:d4e1c02a"
-        }
-      ],
-      "issued_at": "2026-07-12T12:03:00+00:00"
-    }
+    "source_ids": [
+      "synthetic-role-criteria"
+    ],
+    "artifact_ids": [
+      "artifact_synthetic_001"
+    ],
+    "confidence_factors": [
+      "tenant-scoped evidence available"
+    ],
+    "uncertainty_signals": [
+      "synthetic example"
+    ],
+    "review_flags": [
+      "human_review_recommended"
+    ],
+    "output_sections": [
+      "summary",
+      "criteria",
+      "evidence"
+    ],
+    "trace_visibility": "customer",
+    "created_at": "2026-07-12T12:03:00+00:00",
+    "expires_at": null
   },
   "evidence_references": [
     {
@@ -101,10 +102,172 @@
       "timestamp": "2026-07-12T12:03:00+00:00"
     }
   ],
+  "source_references": [
+    {
+      "source_id": "synthetic-role-criteria",
+      "source_type": "customer_grounding",
+      "title": "Synthetic Senior Analyst Role Criteria",
+      "version_id": "sourcever_synthetic_001",
+      "tenant_scope": "authenticated_tenant",
+      "permissions_scope": "customer_private",
+      "permissions_reason": "tenant_scope",
+      "created_at": "2026-07-12T12:03:00+00:00",
+      "opaque_locator": "urn:tenant-safe:source:7a9c8e3d"
+    }
+  ],
+  "artifact_references": [
+    {
+      "artifact_id": "artifact_synthetic_001",
+      "source_id": "synthetic-role-criteria",
+      "artifact_type": "paragraph",
+      "version_id": "artifactver_synthetic_001",
+      "tenant_scope": "authenticated_tenant",
+      "permissions_scope": "customer_private",
+      "locator": "urn:tenant-safe:artifact:7a9c8e3d",
+      "created_at": "2026-07-12T12:03:00+00:00"
+    }
+  ],
+  "evidence_snapshots": [
+    {
+      "evidence_id": "evidence_synthetic_001",
+      "source_id": "synthetic-role-criteria",
+      "artifact_id": "artifact_synthetic_001",
+      "snapshot_id": "snapshot_synthetic_001",
+      "decision_trace_id": "trace_rg_synthetic_001",
+      "summary": "Paragraph-level snippet with synthetic role criteria.",
+      "relevance_hint": 0.78,
+      "captured_at": "2026-07-12T12:03:00+00:00"
+    }
+  ],
   "uncertainty_signals": [
     "synthetic example"
   ],
   "review_flags": [
     "human_review_recommended"
-  ]
+  ],
+  "passport": {
+    "passport_id": "dp_1234567890abcdef1234567890abcdef",
+    "schema_version": "1.0.0",
+    "decision": {
+      "decision_id": "decision_synthetic_001",
+      "status": "completed",
+      "summary": "Synthetic role report grounded on tenant sources with non-operational confidence markers.",
+      "type": "customer_grounded_role_intelligence"
+    },
+    "scope": {
+      "purpose": "workforce_decision_support",
+      "subject_reference": "subject_analyst_role_001",
+      "tenant_scope": "authenticated_tenant"
+    },
+    "evidence": {
+      "coverage": {
+        "basis": "policy_and_role_scope",
+        "ratio": 0.71,
+        "reason": "Role report spans synthetic criteria and supporting artifacts.",
+        "status": "limited"
+      },
+      "freshness": {
+        "status": "not_assessed",
+        "reason": "Freshness evaluation is intentionally omitted in this synthetic fixture.",
+        "as_of": null
+      },
+      "references": [
+        {
+          "evidence_reference_id": "evref_synthetic_001",
+          "evidence_class": "customer_grounding",
+          "source_reference": "sr_synthetic_001",
+          "source_type": "ingest",
+          "source_version": {
+            "status": "identified",
+            "value": "sourcever_synthetic_001",
+            "reason": "Tenant source version resolved from evidence list."
+          },
+          "authority": "customer_grounded",
+          "authority_basis": "Evidence generated inside the tenant boundary and synthetic fixture inputs.",
+          "relationship": "supports",
+          "relevance": {
+            "level": "medium",
+            "score": 0.76,
+            "reason": "Core criteria overlap with requested focus areas.",
+            "status": "assessed",
+            "method": "topic_match"
+          },
+          "tenant_boundary": "authenticated_tenant"
+        }
+      ],
+      "missing_evidence": [
+        {
+          "code": "evidence_coverage_gap",
+          "summary": "No historical review evidence was included in this synthetic fixture.",
+          "required": false,
+          "effect": "limit_scope"
+        }
+      ],
+      "conflicts": [
+        {
+          "code": "no_conflicts_detected",
+          "summary": "No synthetic conflict assertions were reported.",
+          "evidence_reference_ids": [
+            "evidence_synthetic_001",
+            "snapshot_synthetic_001"
+          ]
+        }
+      ]
+    },
+    "assessment": {
+      "confidence": {
+        "status": "assessed",
+        "score": 0.82,
+        "level": "high",
+        "reason": "Multiple tenant sources and a focused role context matched.",
+        "method": "synthetic_scoring"
+      },
+      "evidence_sufficiency": {
+        "status": "not_assessed",
+        "basis": "Evidence sufficiency is not measured for this synthetic fixture."
+      },
+      "trust_score": {
+        "status": "not_assessed",
+        "reason": "Trust score is intentionally not evaluated in this synthetic fixture."
+      },
+      "limitations": [
+        {
+          "code": "synthetic_data",
+          "summary": "Output uses synthetic artifacts and tenant-safe references.",
+          "effect": "inform"
+        }
+      ]
+    },
+    "governance": {
+      "abstention": {
+        "status": "not_abstained",
+        "reason": null
+      },
+      "human_review": {
+        "status": "not_required",
+        "required": false,
+        "reasons": [
+          "Synthetic example with synthetic evidence."
+        ]
+      }
+    },
+    "versions": {
+      "decision_contract": {
+        "status": "identified",
+        "value": "contract_v1.0.0",
+        "reason": "Customer Grounding controlled-beta contract."
+      },
+      "decision_policy": {
+        "status": "identified",
+        "value": "policy_v1.0.0",
+        "reason": "Tenant-safe policy profile for synthetic role intelligence fixtures."
+      },
+      "taxonomy": null
+    },
+    "trace": {
+      "decision_trace_id": "trace_rg_synthetic_001",
+      "generated_at": "2026-07-12T12:03:00+00:00",
+      "request_id": "request_rg_synthetic_001"
+    }
+  }
 }

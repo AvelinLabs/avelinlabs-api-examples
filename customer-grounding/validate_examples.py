@@ -1,12 +1,106 @@
-from __future__ import annotations
-
 import json
+import os
+import urllib.request
 from pathlib import Path
+from typing import Any
 import zipfile
+
+from jsonschema import Draft202012Validator
+from jsonschema.validators import RefResolver
 
 
 ROOT = Path(__file__).resolve().parent
 MAX_FILE_BYTES = 5 * 1024 * 1024
+OPENAPI_SPEC_URL = "https://raw.githubusercontent.com/AvelinLabs/avelin/main/backend/docs/openapi.json"
+
+
+def _build_ref_resolver(openapi: dict[str, Any]) -> RefResolver:
+    schemas = openapi.get("components", {}).get("schemas", {})
+    resolver = RefResolver.from_schema(
+        {"components": {"schemas": schemas}},
+        store={f"#/components/schemas/{name}": schema for name, schema in schemas.items()},
+    )
+    return resolver
+
+
+def _validation_errors(validator: Draft202012Validator, payload: Any, context: str, path: Path) -> list[str]:
+    errors: list[str] = []
+    for error in validator.iter_errors(payload):
+        location = ".".join(str(item) for item in error.path)
+        location = location or "<root>"
+        errors.append(f"{path}: [{context}] {location}: {error.message}")
+    return errors
+
+
+def _load_openapi_spec() -> tuple[dict[str, Any] | None, list[str]]:
+    errors: list[str] = []
+    repo_root = ROOT.parent
+    candidate_paths = []
+    env_path = Path(os.environ.get("OPENAPI_SPEC_PATH", "")).expanduser()
+    if env_path:
+        candidate_paths.append(env_path)
+    candidate_paths.append(repo_root / "tmp_openapi.json")
+    for path in candidate_paths:
+        if not path:
+            continue
+        if not path.exists():
+            continue
+        try:
+            return json.loads(path.read_text(encoding="utf-8-sig")), []
+        except Exception as exc:
+            errors.append(f"{path}: cannot load OpenAPI spec (JSON): {exc}")
+            return None, errors
+    try:
+        with urllib.request.urlopen(OPENAPI_SPEC_URL, timeout=30) as response:
+            return json.loads(response.read().decode("utf-8")), []
+    except Exception as exc:
+        errors.append(f"OpenAPI fetch from origin/main failed: {exc}")
+    return None, errors
+
+
+def validate_openapi_examples() -> list[str]:
+    errors: list[str] = []
+    openapi, openapi_errors = _load_openapi_spec()
+    errors.extend(openapi_errors)
+    if openapi is None:
+        errors.append("OpenAPI validation skipped: unable to load AvelinLabs/avelin backend openapi.json from origin/main.")
+        return errors
+
+    request_schema = openapi.get("components", {}).get("schemas", {}).get("CustomerGroundingRoleReportRequest")
+    response_schema = openapi.get("components", {}).get("schemas", {}).get("CustomerGroundingRoleReportResponse")
+    if request_schema is None:
+        errors.append("OpenAPI validation skipped: CustomerGroundingRoleReportRequest schema missing in openapi.json.")
+        return errors
+    if response_schema is None:
+        errors.append("OpenAPI validation skipped: CustomerGroundingRoleReportResponse schema missing in openapi.json.")
+        return errors
+
+    resolver = _build_ref_resolver(openapi)
+    request_validator = Draft202012Validator(request_schema, resolver=resolver)
+    response_validator = Draft202012Validator(response_schema, resolver=resolver)
+
+    request_paths = [
+        ROOT / "requests" / "role-intelligence-report.json",
+        ROOT / "requests" / "role-intelligence-report-passport-include.example.json",
+    ]
+    for path in request_paths:
+        if not path.exists():
+            errors.append(f"{path}: required request fixture missing")
+            continue
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        errors.extend(_validation_errors(request_validator, payload, "CustomerGroundingRoleReportRequest", path))
+
+    response_paths = [
+        ROOT / "responses" / "role-intelligence-report-passport-level-1.example.json",
+    ]
+    for path in response_paths:
+        if not path.exists():
+            errors.append(f"{path}: required response fixture missing")
+            continue
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        errors.extend(_validation_errors(response_validator, payload, "CustomerGroundingRoleReportResponse", path))
+
+    return errors
 
 
 def validate_json_files() -> list[str]:
@@ -96,6 +190,8 @@ def validate_sample_files() -> list[str]:
 
 def main() -> int:
     errors = validate_json_files() + validate_python_files() + validate_sample_files()
+    openapi_errors = validate_openapi_examples()
+    errors.extend(openapi_errors)
     if errors:
         print("Validation failed:")
         for error in errors:
