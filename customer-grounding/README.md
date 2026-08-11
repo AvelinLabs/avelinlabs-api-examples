@@ -96,6 +96,7 @@ Every endpoint below requires a Runtime API Key whose contract permits `/api/v1/
 | `GET /api/v1/grounding/sources/{source_id}/artifacts` | Lists derived artifacts for a source. | Artifacts remain tenant-scoped and traceable to the source/version lifecycle. |
 | `GET /api/v1/grounding/ingestion-runs/{ingestion_run_id}` | Retrieves one ingestion run. | Use the identifier returned by ingestion; do not assume IDs or completion timing. |
 | `POST /api/v1/grounding/role-intelligence/reports` | Builds a grounded Role Intelligence report from active tenant evidence. | `role_title` is required; `role_context` is optional up to 10,000 characters; `focus_areas` and `source_ids` accept at most 20 items; `top_k` is 1-20 and defaults to 5. |
+| `POST /api/v1/grounding/role-intelligence/reports?include_passport=true` | Adds Decision Passport details to the report as an opt-in envelope. | Omitted / `false` returns the standard report. `true` returns the same report plus `decision_passport` (level 1 in this repository example). |
 | `GET /api/v1/grounding/traces/{trace_id}` | Retrieves the decision trace for a generated report. | Use the returned `trace_id`; traces are evidence for review, not final hiring decisions. |
 | `POST /api/v1/grounding/sources/{source_id}/disable` | Excludes a source from active grounding without deleting it. | The optional action body is empty; lifecycle changes affect later reports. |
 | `POST /api/v1/grounding/sources/{source_id}/enable` | Restores a disabled source to active grounding. | The optional action body is empty. |
@@ -106,6 +107,35 @@ Every endpoint below requires a Runtime API Key whose contract permits `/api/v1/
 Do not send `customer_id`. The Runtime API derives tenant scope from the authenticated platform account context. Requests with `customer_id` in JSON, query string, multipart form fields, or file metadata are rejected.
 
 To validate tenant isolation, use two temporary Runtime API Keys from different controlled-beta accounts. A source, version, artifact, ingestion run, report, or trace created with one key must not be visible with the other key.
+
+## Decision Passport Example (opt-in)
+
+Use the same request payload and set `include_passport=true` as a query flag only when Passport fields are needed.
+
+```bash
+export BASE_URL="https://api.avelinlabs.com"
+export AVELIN_API_KEY="replace-with-your-runtime-api-key"
+
+json_payload='customer-grounding/requests/role-intelligence-report.json'
+
+# include_passport omitted or false => default contract, no decision_passport block
+curl -sS -X POST "${BASE_URL}/api/v1/grounding/role-intelligence/reports" \
+  -H "Authorization: Bearer ${AVELIN_API_KEY}" \
+  -H "Content-Type: application/json" \
+  --data-binary "@${json_payload}" \
+  | python -m json.tool
+
+# include_passport=true => Decision Passport included (Level 1 example below)
+curl -sS -X POST "${BASE_URL}/api/v1/grounding/role-intelligence/reports?include_passport=true" \
+  -H "Authorization: Bearer ${AVELIN_API_KEY}" \
+  -H "Content-Type: application/json" \
+  --data-binary "@${json_payload}" \
+  | python -m json.tool
+```
+
+Example synthetic response with `include_passport=true`:
+
+- `customer-grounding/responses/role-intelligence-report-passport-level-1.example.json`
 
 ## MCP Examples
 
