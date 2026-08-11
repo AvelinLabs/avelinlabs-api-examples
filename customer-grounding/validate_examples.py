@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import json
 import os
+import urllib.error
 import urllib.request
 from pathlib import Path
 from typing import Any
@@ -145,24 +148,32 @@ def _validate_passport_semantics(payload: dict[str, Any], *, path: Path) -> list
 def _load_openapi_spec() -> tuple[dict[str, Any] | None, list[str]]:
     errors: list[str] = []
     repo_root = ROOT.parent
-    candidate_paths = []
-    env_path = Path(os.environ.get("OPENAPI_SPEC_PATH", "")).expanduser()
-    if env_path:
-        candidate_paths.append(env_path)
-    candidate_paths.append(repo_root / "tmp_openapi.json")
+    candidate_paths: list[Path] = [repo_root / "tmp_openapi.json"]
+    env_spec_path = os.environ.get("OPENAPI_SPEC_PATH", "").strip()
+    if env_spec_path:
+        candidate_paths.insert(0, Path(env_spec_path).expanduser())
+
+    if not env_spec_path:
+        errors.append("OPENAPI_SPEC_PATH not set; skipping local override and using fallback candidates.")
+    else:
+        errors.append(f"OPENAPI_SPEC_PATH provided: {env_spec_path}")
+
     for path in candidate_paths:
-        if not path:
-            continue
         if not path.exists():
             continue
         try:
             return json.loads(path.read_text(encoding="utf-8-sig")), []
         except Exception as exc:
             errors.append(f"{path}: cannot load OpenAPI spec (JSON): {exc}")
-            return None, errors
+            continue
     try:
         with urllib.request.urlopen(OPENAPI_SPEC_URL, timeout=30) as response:
             return json.loads(response.read().decode("utf-8")), []
+    except urllib.error.URLError as exc:
+        errors.append(
+            "OpenAPI fetch from origin/main failed; this often indicates blocked or unavailable network connectivity: "
+            f"{exc}"
+        )
     except Exception as exc:
         errors.append(f"OpenAPI fetch from origin/main failed: {exc}")
     return None, errors

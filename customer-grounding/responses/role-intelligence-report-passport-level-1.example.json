@@ -155,15 +155,13 @@
     },
     "evidence": {
       "coverage": {
-        "basis": "policy_and_role_scope",
-        "ratio": 0.71,
-        "reason": "Role report spans synthetic criteria and supporting artifacts.",
-        "status": "limited"
+        "status": "measured",
+        "ratio": 1.0,
+        "basis": "requested_focus_areas"
       },
       "freshness": {
         "status": "not_assessed",
-        "reason": "Freshness evaluation is intentionally omitted in this synthetic fixture.",
-        "as_of": null
+        "reason": "Freshness has not yet been assessed for this synthetic tenant-grounded request."
       },
       "references": [
         {
@@ -182,19 +180,12 @@
             "level": "medium",
             "score": 0.76,
             "status": "assessed",
-            "method": "topic_match"
+            "method": "existing_grounding_retrieval"
           },
           "tenant_boundary": "authenticated_tenant"
         }
       ],
-      "missing_evidence": [
-        {
-          "code": "evidence_coverage_gap",
-          "summary": "No historical review evidence was included in this synthetic fixture.",
-          "required": false,
-          "effect": "limit_scope"
-        }
-      ],
+      "missing_evidence": [],
       "conflicts": []
     },
     "assessment": {
@@ -202,11 +193,11 @@
         "status": "assessed",
         "score": 0.82,
         "level": "high",
-        "method": "synthetic_scoring"
+        "method": "existing_role_intelligence_confidence"
       },
       "evidence_sufficiency": {
-        "status": "not_assessed",
-        "basis": "Evidence sufficiency is not measured for this synthetic fixture."
+        "status": "sufficient",
+        "basis": "One evidence reference fully supports all requested focus areas with high relevance."
       },
       "trust_score": {
         "status": "not_assessed",
@@ -214,16 +205,15 @@
       },
       "limitations": [
         {
-          "code": "synthetic_data",
-          "summary": "Output uses synthetic artifacts and tenant-safe references.",
-          "effect": "inform"
+          "code": "customer_grounding_only",
+          "summary": "The passport is grounded solely on customer-owned evidence available to this tenant.",
+          "effect": "limit_scope"
         }
       ]
     },
     "governance": {
       "abstention": {
-        "status": "not_abstained",
-        "reason": null
+        "status": "not_abstained"
       },
       "human_review": {
         "status": "not_required",
@@ -234,11 +224,11 @@
     "versions": {
       "decision_contract": {
         "status": "identified",
-        "value": "ver_contract_01"
+        "value": "1.0.0"
       },
       "decision_policy": {
         "status": "identified",
-        "value": "ver_policy_01"
+        "value": "grounded_role_intelligence_review_rules"
       },
       "taxonomy": null
     },
