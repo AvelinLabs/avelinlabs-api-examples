@@ -1,0 +1,241 @@
+{
+  "trace_id": "trace_rg_synthetic_001",
+  "draft": {
+    "decision_quality": "synthetic",
+    "generated_at": "2026-07-12T12:03:00+00:00",
+    "purpose": "tenant-scoped role intelligence with Decision Passport"
+  },
+  "report": {
+    "role_title": "Senior Analyst",
+    "grounded_summary": "Synthetic grounded summary based on tenant-scoped Customer Grounding evidence.",
+    "key_role_criteria": [
+      {
+        "text": "Clarify ambiguous client requirements and maintain traceable review evidence.",
+        "evidence_ids": [
+          "evidence_synthetic_001"
+        ],
+        "source_ids": [
+          "synthetic-role-criteria"
+        ],
+        "artifact_ids": [
+          "artifact_synthetic_001"
+        ],
+        "focus_areas": [
+          "requirements clarity",
+          "evidence review"
+        ]
+      }
+    ],
+    "evidence_ids": [
+      "evidence_synthetic_001"
+    ],
+    "source_ids": [
+      "synthetic-role-criteria"
+    ],
+    "artifact_ids": [
+      "artifact_synthetic_001"
+    ],
+    "confidence": {
+      "score": 0.72,
+      "level": "medium",
+      "indicators": [
+        "tenant-scoped evidence available"
+      ]
+    },
+    "uncertainty": {
+      "level": "low",
+      "indicators": [
+        "synthetic example"
+      ]
+    },
+    "review_flags": []
+  },
+  "trace": {
+    "trace_id": "trace_rg_synthetic_001",
+    "decision_id": "decision_rg_synthetic_001",
+    "decision_type": "customer_grounded_role_intelligence",
+    "access_channel": "customer_api",
+    "evidence_ids": [
+      "evidence_synthetic_001"
+    ],
+    "source_ids": [
+      "synthetic-role-criteria"
+    ],
+    "artifact_ids": [
+      "artifact_synthetic_001"
+    ],
+    "confidence_factors": [
+      "tenant-scoped evidence available"
+    ],
+    "uncertainty_signals": [
+      "synthetic example"
+    ],
+    "review_flags": [],
+    "output_sections": [
+      "summary",
+      "criteria",
+      "evidence"
+    ],
+    "trace_visibility": "customer",
+    "created_at": "2026-07-12T12:03:00+00:00",
+    "expires_at": null
+  },
+  "evidence_references": [
+    {
+      "evidence_id": "evidence_synthetic_001",
+      "evidence_type": "customer_grounding_artifact",
+      "source_id": "synthetic-role-criteria",
+      "artifact_id": "artifact_synthetic_001",
+      "source_title": "Synthetic Senior Analyst Role Criteria",
+      "source_version": "srcver_synthetic_001",
+      "citation_locator": "paragraph 1",
+      "excerpt": "Senior analysts translate ambiguous client needs into decision-ready requirements.",
+      "relevance_score": 0.78,
+      "retrieval_reason": "Matched requirements and evidence review terms.",
+      "support_relationship": "supports",
+      "confidence_hint": 0.72,
+      "permissions_scope": "customer_private",
+      "timestamp": "2026-07-12T12:03:00+00:00"
+    }
+  ],
+  "source_references": [
+    {
+      "source_id": "synthetic-role-criteria",
+      "source_type": "customer_grounding",
+      "title": "Synthetic Senior Analyst Role Criteria",
+      "version_id": "sourcever_synthetic_001",
+      "tenant_scope": "authenticated_tenant",
+      "permissions_scope": "customer_private",
+      "permissions_reason": "tenant_scope",
+      "created_at": "2026-07-12T12:03:00+00:00",
+      "opaque_locator": "urn:tenant-safe:source:7a9c8e3d"
+    }
+  ],
+  "artifact_references": [
+    {
+      "artifact_id": "artifact_synthetic_001",
+      "source_id": "synthetic-role-criteria",
+      "artifact_type": "paragraph",
+      "version_id": "artifactver_synthetic_001",
+      "tenant_scope": "authenticated_tenant",
+      "permissions_scope": "customer_private",
+      "locator": "urn:tenant-safe:artifact:7a9c8e3d",
+      "created_at": "2026-07-12T12:03:00+00:00"
+    }
+  ],
+  "evidence_snapshots": [
+    {
+      "evidence_id": "evidence_synthetic_001",
+      "source_id": "synthetic-role-criteria",
+      "artifact_id": "artifact_synthetic_001",
+      "snapshot_id": "snapshot_synthetic_001",
+      "decision_trace_id": "trace_rg_synthetic_001",
+      "summary": "Paragraph-level snippet with synthetic role criteria.",
+      "relevance_hint": 0.78,
+      "captured_at": "2026-07-12T12:03:00+00:00"
+    }
+  ],
+  "uncertainty_signals": [
+    "synthetic example"
+  ],
+  "review_flags": [],
+  "passport": {
+    "passport_id": "dp_1234567890abcdef1234567890abcdef",
+    "schema_version": "1.0.0",
+    "decision": {
+      "decision_id": "decision_rg_synthetic_001",
+      "status": "completed",
+      "summary": "Synthetic role report grounded on tenant sources with non-operational confidence markers.",
+      "type": "customer_grounded_role_intelligence"
+    },
+    "scope": {
+      "purpose": "workforce_decision_support",
+      "subject_reference": "subject_8f7c2a9d1e0b4f6",
+      "tenant_scope": "authenticated_tenant"
+    },
+    "evidence": {
+      "coverage": {
+        "status": "measured",
+        "ratio": 1.0,
+        "basis": "requested_focus_areas"
+      },
+      "freshness": {
+        "status": "not_assessed",
+        "reason": "Freshness has not yet been assessed for this synthetic tenant-grounded request."
+      },
+      "references": [
+        {
+          "evidence_reference_id": "evid_8f7c2a9d1e0b4f6",
+          "evidence_class": "customer_grounding",
+          "source_reference": "src_2b6c4d9e5f1a8c0",
+          "source_type": "ingest",
+          "source_version": {
+            "status": "identified",
+            "value": "ver_2b6c4d9e5f1a8c0"
+          },
+          "authority": "customer_grounded",
+          "authority_basis": "Evidence generated inside the tenant boundary and synthetic fixture inputs.",
+          "relationship": "supports",
+          "relevance": {
+            "level": "medium",
+            "score": 0.76,
+            "status": "assessed",
+            "method": "existing_grounding_retrieval"
+          },
+          "tenant_boundary": "authenticated_tenant"
+        }
+      ],
+      "missing_evidence": [],
+      "conflicts": []
+    },
+    "assessment": {
+      "confidence": {
+        "status": "assessed",
+        "score": 0.82,
+        "level": "high",
+        "method": "existing_role_intelligence_confidence"
+      },
+      "evidence_sufficiency": {
+        "status": "sufficient",
+        "basis": "One evidence reference fully supports all requested focus areas with high relevance."
+      },
+      "trust_score": {
+        "status": "not_assessed",
+        "reason": "Trust score is intentionally not evaluated in this synthetic fixture."
+      },
+      "limitations": [
+        {
+          "code": "customer_grounding_only",
+          "summary": "The passport is grounded solely on customer-owned evidence available to this tenant.",
+          "effect": "limit_scope"
+        }
+      ]
+    },
+    "governance": {
+      "abstention": {
+        "status": "not_abstained"
+      },
+      "human_review": {
+        "status": "not_required",
+        "required": false,
+        "reasons": []
+      }
+    },
+    "versions": {
+      "decision_contract": {
+        "status": "identified",
+        "value": "1.0.0"
+      },
+      "decision_policy": {
+        "status": "identified",
+        "value": "grounded_role_intelligence_review_rules"
+      },
+      "taxonomy": null
+    },
+    "trace": {
+      "decision_trace_id": "trace_rg_synthetic_001",
+      "generated_at": "2026-07-12T12:03:00+00:00",
+      "request_id": "request_rg_synthetic_001"
+    }
+  }
+}

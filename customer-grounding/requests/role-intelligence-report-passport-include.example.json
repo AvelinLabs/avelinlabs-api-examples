@@ -1,0 +1,14 @@
+{
+  "include_passport": true,
+  "focus_areas": [
+    "requirements clarity",
+    "stakeholder communication",
+    "evidence review"
+  ],
+  "role_context": "The role supports HR advisory clients with intake clarification, requirements workshops, SQL analysis, and evidence-backed review guidance.",
+  "role_title": "Senior Analyst",
+  "source_ids": [
+    "synthetic-role-criteria"
+  ],
+  "top_k": 5
+}
