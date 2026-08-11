@@ -32,6 +32,116 @@ def _validation_errors(validator: Draft202012Validator, payload: Any, context: s
     return errors
 
 
+def _semantic_id_set(payload: dict[str, Any]) -> set[str]:
+    passport = payload.get("passport") or {}
+    evidence = passport.get("evidence") if isinstance(passport, dict) else None
+    refs = evidence.get("references") if isinstance(evidence, dict) else []
+    return {
+        str(ref.get("evidence_reference_id"))
+        for ref in (refs or [])
+        if isinstance(ref, dict) and ref.get("evidence_reference_id") is not None
+    }
+
+
+def _validate_passport_semantics(payload: dict[str, Any], *, path: Path) -> list[str]:
+    errors: list[str] = []
+    passport = payload.get("passport")
+    if not isinstance(passport, dict):
+        return errors
+
+    decision = passport.get("decision") or {}
+    if isinstance(decision, dict):
+        trace = payload.get("trace") or {}
+        if isinstance(trace, dict):
+            passport_decision_id = decision.get("decision_id")
+            trace_decision_id = trace.get("decision_id")
+            if passport_decision_id and trace_decision_id and passport_decision_id != trace_decision_id:
+                errors.append(
+                    f"{path}: [passport] decision.decision_id ({passport_decision_id}) != trace.decision_id ({trace_decision_id})"
+                )
+
+        if decision.get("status") == "completed":
+            governance = passport.get("governance") or {}
+            human_review = governance.get("human_review") if isinstance(governance, dict) else None
+            if not isinstance(human_review, dict):
+                errors.append(f"{path}: [passport] completed decision requires governance.human_review object")
+            else:
+                if human_review.get("required") is not False or human_review.get("status") != "not_required":
+                    errors.append(
+                        f"{path}: [passport] completed decision requires human_review.required=false and human_review.status=not_required"
+                    )
+                if human_review.get("reasons") != []:
+                    errors.append(f"{path}: [passport] completed decision requires human_review.reasons=[]")
+    else:
+        errors.append(f"{path}: [passport] decision must be object")
+
+    versions = passport.get("versions") if isinstance(passport, dict) else None
+    if isinstance(versions, dict):
+        for key in ("decision_contract", "decision_policy", "taxonomy"):
+            version_state = versions.get(key)
+            if not isinstance(version_state, dict):
+                continue
+            if version_state.get("status") == "identified":
+                if not version_state.get("value"):
+                    errors.append(f"{path}: [passport] versions.{key}.value required when status=identified")
+                if "reason" in version_state:
+                    errors.append(f"{path}: [passport] versions.{key}.reason must be absent when status=identified")
+
+    evidence = passport.get("evidence") if isinstance(passport, dict) else None
+    if isinstance(evidence, dict):
+        refs = evidence.get("references")
+        if isinstance(refs, list):
+            for idx, item in enumerate(refs):
+                if not isinstance(item, dict):
+                    continue
+                source_version = item.get("source_version")
+                if isinstance(source_version, dict) and source_version.get("status") == "identified":
+                    if not source_version.get("value"):
+                        errors.append(
+                            f"{path}: [passport] evidence.references[{idx}].source_version.value required when status=identified"
+                        )
+                    if "reason" in source_version:
+                        errors.append(
+                            f"{path}: [passport] evidence.references[{idx}].source_version.reason must be absent when status=identified"
+                        )
+
+                relevance = item.get("relevance")
+                if isinstance(relevance, dict) and relevance.get("status") == "assessed":
+                    for field in ("score", "level", "method"):
+                        if relevance.get(field) is None:
+                            errors.append(
+                                f"{path}: [passport] evidence.references[{idx}].relevance.{field} required when status=assessed"
+                            )
+                    if "reason" in relevance:
+                        errors.append(
+                            f"{path}: [passport] evidence.references[{idx}].relevance.reason must be absent when status=assessed"
+                        )
+
+        for idx, conflict in enumerate(evidence.get("conflicts") or []):
+            if not isinstance(conflict, dict):
+                continue
+            conflict_ids = conflict.get("evidence_reference_ids")
+            if isinstance(conflict_ids, list):
+                known_refs = _semantic_id_set(payload)
+                for conflict_id in conflict_ids:
+                    if conflict_id not in known_refs:
+                        errors.append(
+                            f"{path}: [passport] evidence.conflicts[{idx}] references unknown evidence_reference_id={conflict_id}"
+                        )
+
+    assessment = passport.get("assessment") if isinstance(passport, dict) else None
+    if isinstance(assessment, dict):
+        confidence = assessment.get("confidence")
+        if isinstance(confidence, dict) and confidence.get("status") == "assessed":
+            for field in ("score", "level", "method"):
+                if confidence.get(field) is None:
+                    errors.append(f"{path}: [passport] assessment.confidence.{field} required when status=assessed")
+            if "reason" in confidence:
+                errors.append(f"{path}: [passport] assessment.confidence.reason must be absent when status=assessed")
+
+    return errors
+
+
 def _load_openapi_spec() -> tuple[dict[str, Any] | None, list[str]]:
     errors: list[str] = []
     repo_root = ROOT.parent
@@ -73,11 +183,10 @@ def validate_openapi_examples() -> list[str]:
         return errors
     if response_schema is None:
         errors.append("OpenAPI validation skipped: CustomerGroundingRoleReportResponse schema missing in openapi.json.")
-        return errors
 
     resolver = _build_ref_resolver(openapi)
     request_validator = Draft202012Validator(request_schema, resolver=resolver)
-    response_validator = Draft202012Validator(response_schema, resolver=resolver)
+    response_validator = Draft202012Validator(response_schema, resolver=resolver) if response_schema else None
 
     request_paths = [
         ROOT / "requests" / "role-intelligence-report.json",
@@ -98,7 +207,9 @@ def validate_openapi_examples() -> list[str]:
             errors.append(f"{path}: required response fixture missing")
             continue
         payload = json.loads(path.read_text(encoding="utf-8"))
-        errors.extend(_validation_errors(response_validator, payload, "CustomerGroundingRoleReportResponse", path))
+        if response_validator is not None:
+            errors.extend(_validation_errors(response_validator, payload, "CustomerGroundingRoleReportResponse", path))
+        errors.extend(_validate_passport_semantics(payload, path=path))
 
     return errors
 

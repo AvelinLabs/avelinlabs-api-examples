@@ -48,9 +48,7 @@
         "synthetic example"
       ]
     },
-    "review_flags": [
-      "human_review_recommended"
-    ]
+    "review_flags": []
   },
   "trace": {
     "trace_id": "trace_rg_synthetic_001",
@@ -72,9 +70,7 @@
     "uncertainty_signals": [
       "synthetic example"
     ],
-    "review_flags": [
-      "human_review_recommended"
-    ],
+    "review_flags": [],
     "output_sections": [
       "summary",
       "criteria",
@@ -142,21 +138,19 @@
   "uncertainty_signals": [
     "synthetic example"
   ],
-  "review_flags": [
-    "human_review_recommended"
-  ],
+  "review_flags": [],
   "passport": {
     "passport_id": "dp_1234567890abcdef1234567890abcdef",
     "schema_version": "1.0.0",
     "decision": {
-      "decision_id": "decision_synthetic_001",
+      "decision_id": "decision_rg_synthetic_001",
       "status": "completed",
       "summary": "Synthetic role report grounded on tenant sources with non-operational confidence markers.",
       "type": "customer_grounded_role_intelligence"
     },
     "scope": {
       "purpose": "workforce_decision_support",
-      "subject_reference": "subject_analyst_role_001",
+      "subject_reference": "subject_8f7c2a9d1e0b4f6",
       "tenant_scope": "authenticated_tenant"
     },
     "evidence": {
@@ -173,14 +167,13 @@
       },
       "references": [
         {
-          "evidence_reference_id": "evref_synthetic_001",
+          "evidence_reference_id": "evid_8f7c2a9d1e0b4f6",
           "evidence_class": "customer_grounding",
-          "source_reference": "sr_synthetic_001",
+          "source_reference": "src_2b6c4d9e5f1a8c0",
           "source_type": "ingest",
           "source_version": {
             "status": "identified",
-            "value": "sourcever_synthetic_001",
-            "reason": "Tenant source version resolved from evidence list."
+            "value": "ver_2b6c4d9e5f1a8c0"
           },
           "authority": "customer_grounded",
           "authority_basis": "Evidence generated inside the tenant boundary and synthetic fixture inputs.",
@@ -188,7 +181,6 @@
           "relevance": {
             "level": "medium",
             "score": 0.76,
-            "reason": "Core criteria overlap with requested focus areas.",
             "status": "assessed",
             "method": "topic_match"
           },
@@ -203,23 +195,13 @@
           "effect": "limit_scope"
         }
       ],
-      "conflicts": [
-        {
-          "code": "no_conflicts_detected",
-          "summary": "No synthetic conflict assertions were reported.",
-          "evidence_reference_ids": [
-            "evidence_synthetic_001",
-            "snapshot_synthetic_001"
-          ]
-        }
-      ]
+      "conflicts": []
     },
     "assessment": {
       "confidence": {
         "status": "assessed",
         "score": 0.82,
         "level": "high",
-        "reason": "Multiple tenant sources and a focused role context matched.",
         "method": "synthetic_scoring"
       },
       "evidence_sufficiency": {
@@ -246,21 +228,17 @@
       "human_review": {
         "status": "not_required",
         "required": false,
-        "reasons": [
-          "Synthetic example with synthetic evidence."
-        ]
+        "reasons": []
       }
     },
     "versions": {
       "decision_contract": {
         "status": "identified",
-        "value": "contract_v1.0.0",
-        "reason": "Customer Grounding controlled-beta contract."
+        "value": "ver_contract_01"
       },
       "decision_policy": {
         "status": "identified",
-        "value": "policy_v1.0.0",
-        "reason": "Tenant-safe policy profile for synthetic role intelligence fixtures."
+        "value": "ver_policy_01"
       },
       "taxonomy": null
     },
