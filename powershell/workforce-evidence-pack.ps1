@@ -51,8 +51,12 @@ $first = Invoke-RestMethod `
     -ContentType "application/json" `
     -Body $body
 
-$request.industries = @($request.industries)[-1..-$request.industries.Count]
-$request.occupations = @($request.occupations)[-1..-$request.occupations.Count]
+$reorderedIndustries = @($request.industries)
+$reorderedOccupations = @($request.occupations)
+[array]::Reverse($reorderedIndustries)
+[array]::Reverse($reorderedOccupations)
+$request.industries = $reorderedIndustries
+$request.occupations = $reorderedOccupations
 $reorderedBody = $request | ConvertTo-Json -Depth 10
 $second = Invoke-RestMethod `
     -Method Post `
