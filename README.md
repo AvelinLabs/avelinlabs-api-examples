@@ -114,6 +114,12 @@ The explanations are centralized here so the Bash/cURL, PowerShell, Command Prom
 | `POST /api/v1/occupation/candidates` | Returns a deterministic, explainable shortlist of plausible O*NET occupations. | Runtime API Key | `title` is required; `description` is optional; `limit` is 1-10 and defaults to 5. The supplied fixture requests and illustrates five candidates. `relevance_score` only orders this response: the endpoint does not classify, select, persist, or invoke OpenAI. |
 | `GET /api/v1/occupation/{onet_code}` | Returns a compact O*NET occupation summary. | Runtime API Key | `onet_code` is a path value such as `15-1252.00`; the response contains the code, title, and top skills. |
 | `GET /api/v1/occupation/profile/{onet_code}` | Returns the fuller occupation profile. | Runtime API Key | The response groups `occupation`, `skills`, `technologies`, `tasks`, and `related_occupations`. It is read-only reference data. |
+| `GET /api/v1/workforce/capabilities` | Advertises the controlled-beta Workforce country, geography, taxonomy, evidence, and delivery boundary. | Runtime API Key | Evidence Pack creation is usable only when `features.evidence_pack_creation=available`. |
+| `GET /api/v1/workforce/occupations` | Searches or lists canonical six-digit U.S. SOC help backed by O*NET 30.3. | Runtime API Key | This is reference help, not occupation selection or investment ranking. |
+| `GET /api/v1/workforce/occupations/{soc_code}` | Returns one SOC record with bounded O*NET tasks and skills. | Runtime API Key | SOC, O*NET-SOC, and NAICS remain distinct taxonomies. |
+| `POST /api/v1/workforce/evidence-packs` | Creates or reuses an account-scoped Workforce Evidence Pack. | Runtime API Key | Uses only explicitly approved OEWS/QWI snapshots and local O*NET reference data; no provider is called on the request path. |
+| `GET /api/v1/workforce/evidence-packs/{evidence_pack_id}` | Retrieves the machine-readable Evidence Pack. | Runtime API Key | Retrieval is account-scoped and preserves source lineage, boundaries, and limitations. |
+| `GET /api/v1/workforce/evidence-packs/{evidence_pack_id}/report` | Retrieves the standalone HTML buyer report. | Runtime API Key | Initial format is `html`; the report has no external scripts or assets. |
 | `GET /api/v1/market/top` | Returns top market terms for a selected evidence type and scope. | Runtime API Key | `type` is required: `technology`, `skill`, `ability`, `knowledge`, or `work_activity`. `scope` is `active` or `historical`; `limit` is 1-100 and defaults to 20; `country` is optional. |
 | `GET /api/v1/market/skills/trending` | Returns skill growth for the latest 30 days versus the preceding 30 days. | Runtime API Key | `limit` is 1-100 and defaults to 20. Counts and `growth_rate` are scoped market signals, not universal totals. |
 | `GET /api/v1/market/technologies/trending` | Returns technology growth for the same adjacent 30-day windows. | Runtime API Key | `limit` is 1-100 and defaults to 20. A bootstrap value can occur when the current window has demand and the previous window has none. |
@@ -131,6 +137,7 @@ Customer Grounding endpoint details are kept with its representative lifecycle i
 | Platform onboarding | `platform_onboarding.py` | docs flow | native PowerShell and CMD wrapper | register, verify, login, key creation |
 | Job analyze/classify | yes | yes | native classify; all Python scripts run from both shells | yes |
 | Occupation candidates/summary/profile | yes | yes | run the Python scripts from either Windows shell | yes |
+| Workforce SOC help and Evidence Pack lifecycle | yes | creation request | native lifecycle | not yet |
 | Market top/overview | yes | yes | run the Python scripts from either Windows shell | yes |
 | Market skill/technology trends | yes | yes | native PowerShell and CMD wrappers | yes |
 | Market remote rate | yes | yes | native PowerShell and CMD wrapper | yes |
@@ -148,6 +155,7 @@ bash curl/job-classify.sh
 bash curl/occupation-candidates.sh
 bash curl/occupation.sh
 bash curl/occupation-profile.sh
+bash curl/workforce-evidence-pack.sh
 bash curl/market-top-us-technology.sh
 bash curl/market-overview.sh
 bash curl/market-skills-trending.sh
@@ -165,6 +173,7 @@ python3 python/job_classify.py
 python3 python/occupation_candidates.py
 python3 python/occupation.py
 python3 python/occupation_profile.py
+python3 python/workforce_evidence_pack.py
 python3 python/market_top.py
 python3 python/market_overview.py
 python3 python/market_skills_trending.py
@@ -175,6 +184,12 @@ python3 python/health_ready.py
 ```
 
 On Windows replace `python3` with `py -3`.
+
+## Workforce Evidence Pack
+
+The controlled-beta workflow under [`workforce-evidence-pack/`](workforce-evidence-pack/README.md) verifies capabilities, U.S. SOC help, deterministic create/reuse, account-scoped JSON retrieval, and standalone HTML retrieval. It includes Python, native PowerShell, and cURL entry points plus the accepted static Connecticut buyer-report fixture.
+
+The example requires an explicitly configured `BASE_URL` because this surface may not yet be enabled in production. It does not call paid providers, does not establish arbitrary-country support, and keeps JobDataAPI on `HOLD`.
 
 ## Input quality evaluation
 
@@ -265,6 +280,7 @@ Configure the collection variables before use. The collection groups Platform, J
 |-- payloads/
 |-- postman/
 |-- powershell/
+|-- workforce-evidence-pack/
 |-- python/
 |-- responses/
 |-- requirements.txt
