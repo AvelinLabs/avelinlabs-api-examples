@@ -16,9 +16,11 @@ recommendation, or call JobDataAPI during the request.
 
 ## Availability
 
-This surface is controlled beta and may not yet be enabled in production. Set
-`BASE_URL` explicitly to an environment whose
-`GET /api/v1/workforce/capabilities?country_code=US` response advertises
+This surface is live in production as a controlled beta for authenticated,
+entitled callers using the approved U.S./Connecticut snapshot. The examples
+default to `https://api.avelinlabs.com`; override `BASE_URL` only for an approved
+DEV or staging environment. Always confirm that
+`GET /api/v1/workforce/capabilities?country_code=US` advertises
 `features.evidence_pack_creation=available`.
 
 The committed request is intentionally bounded to `US / state / CT`. The
@@ -41,7 +43,7 @@ From the repository root:
 
 ```bash
 python3 -m pip install -r requirements.txt
-export BASE_URL="http://127.0.0.1:8010"
+export BASE_URL="https://api.avelinlabs.com"
 export AVELIN_API_KEY="replace-with-your-runtime-api-key"
 python3 python/workforce_evidence_pack.py
 ```
@@ -50,7 +52,7 @@ Windows:
 
 ```powershell
 py -3 -m pip install -r requirements.txt
-$env:BASE_URL = "http://127.0.0.1:8010"
+$env:BASE_URL = "https://api.avelinlabs.com"
 $env:AVELIN_API_KEY = "replace-with-your-runtime-api-key"
 py -3 python\workforce_evidence_pack.py
 ```
@@ -58,7 +60,7 @@ py -3 python\workforce_evidence_pack.py
 ## Native PowerShell
 
 ```powershell
-$env:BASE_URL = "http://127.0.0.1:8010"
+$env:BASE_URL = "https://api.avelinlabs.com"
 $env:AVELIN_API_KEY = "replace-with-your-runtime-api-key"
 .\powershell\workforce-evidence-pack.ps1
 ```
@@ -67,18 +69,28 @@ Both workflows save the retrieved JSON and HTML under
 `workforce-evidence-pack/output/` by default. Set `OUTPUT_DIR` to use another
 location. Do not commit customer-generated output or credentials.
 
-## cURL creation request
+## cURL lifecycle
+
+The cURL examples cover capability discovery, SOC search/detail, pack creation,
+JSON retrieval, and HTML retrieval:
 
 ```bash
-curl --fail-with-body --silent --show-error \
-  -X POST "$BASE_URL/api/v1/workforce/evidence-packs" \
-  -H "Authorization: Bearer $AVELIN_API_KEY" \
-  -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  --data @workforce-evidence-pack/request.json
+export BASE_URL="https://api.avelinlabs.com"
+export AVELIN_API_KEY="replace-with-your-runtime-api-key"
+
+bash curl/workforce-capabilities.sh
+bash curl/workforce-occupations.sh
+bash curl/workforce-occupation.sh
+bash curl/workforce-evidence-pack.sh
+
+export EVIDENCE_PACK_ID="wep_copy_the_id_returned_by_creation"
+bash curl/workforce-evidence-pack-get.sh
+bash curl/workforce-evidence-pack-report.sh
 ```
 
-On PowerShell use `curl.exe` explicitly.
+The report script writes `${EVIDENCE_PACK_ID}.html` under
+`workforce-evidence-pack/output/`. On PowerShell use `curl.exe` explicitly, or
+run the native PowerShell lifecycle above.
 
 ## Buyer-facing fixture
 

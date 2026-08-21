@@ -137,7 +137,7 @@ Customer Grounding endpoint details are kept with its representative lifecycle i
 | Platform onboarding | `platform_onboarding.py` | docs flow | native PowerShell and CMD wrapper | register, verify, login, key creation |
 | Job analyze/classify | yes | yes | native classify; all Python scripts run from both shells | yes |
 | Occupation candidates/summary/profile | yes | yes | run the Python scripts from either Windows shell | yes |
-| Workforce SOC help and Evidence Pack lifecycle | yes | creation request | native lifecycle | not yet |
+| Workforce SOC help and Evidence Pack lifecycle | yes | full lifecycle | native lifecycle | yes |
 | Market top/overview | yes | yes | run the Python scripts from either Windows shell | yes |
 | Market skill/technology trends | yes | yes | native PowerShell and CMD wrappers | yes |
 | Market remote rate | yes | yes | native PowerShell and CMD wrapper | yes |
@@ -155,7 +155,12 @@ bash curl/job-classify.sh
 bash curl/occupation-candidates.sh
 bash curl/occupation.sh
 bash curl/occupation-profile.sh
+bash curl/workforce-capabilities.sh
+bash curl/workforce-occupations.sh
+bash curl/workforce-occupation.sh
 bash curl/workforce-evidence-pack.sh
+EVIDENCE_PACK_ID=wep_replace_me bash curl/workforce-evidence-pack-get.sh
+EVIDENCE_PACK_ID=wep_replace_me bash curl/workforce-evidence-pack-report.sh
 bash curl/market-top-us-technology.sh
 bash curl/market-overview.sh
 bash curl/market-skills-trending.sh
@@ -189,7 +194,7 @@ On Windows replace `python3` with `py -3`.
 
 The controlled-beta workflow under [`workforce-evidence-pack/`](workforce-evidence-pack/README.md) verifies capabilities, U.S. SOC help, deterministic create/reuse, account-scoped JSON retrieval, and standalone HTML retrieval. It includes Python, native PowerShell, and cURL entry points plus the accepted static Connecticut buyer-report fixture.
 
-The example requires an explicitly configured `BASE_URL` because this surface may not yet be enabled in production. It does not call paid providers, does not establish arbitrary-country support, and keeps JobDataAPI on `HOLD`.
+The hosted controlled beta is live at `https://api.avelinlabs.com` for the approved `US / state / CT` snapshot. Override `BASE_URL` only for an approved DEV or staging environment. The workflow does not call paid providers, does not establish arbitrary-country support, and keeps JobDataAPI on `HOLD`.
 
 ## Input quality evaluation
 
@@ -265,7 +270,7 @@ Import:
 postman/avelinlabs-api.postman_collection.json
 ```
 
-Configure the collection variables before use. The collection groups Platform, Job, Occupation, Market, Health, Customer Grounding, and Errors. It does not automatically persist the one-time raw Runtime API Key.
+Configure the collection variables before use. The collection groups Platform, Job, Occupation, Workforce, Market, Health, Customer Grounding, and Errors. It does not automatically persist the one-time raw Runtime API Key.
 
 ## Repository structure
 

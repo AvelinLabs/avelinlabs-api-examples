@@ -48,6 +48,18 @@
     {
       "key": "trace_id",
       "value": ""
+    },
+    {
+      "key": "country_code",
+      "value": "US"
+    },
+    {
+      "key": "soc_code",
+      "value": "51-4121"
+    },
+    {
+      "key": "evidence_pack_id",
+      "value": ""
     }
   ],
   "auth": {
@@ -363,6 +375,188 @@
             "method": "GET",
             "header": [],
             "url": "{{base_url}}/api/v1/occupation/profile/{{onet_code}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Workforce",
+      "item": [
+        {
+          "name": "Capabilities",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/workforce/capabilities?country_code={{country_code}}"
+          }
+        },
+        {
+          "name": "Search SOC occupations",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/workforce/occupations?country_code={{country_code}}&query=welder&limit=5"
+          }
+        },
+        {
+          "name": "SOC occupation detail",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/workforce/occupations/{{soc_code}}?country_code={{country_code}}"
+          }
+        },
+        {
+          "name": "Create or reuse Evidence Pack",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });",
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set(\"evidence_pack_id\", body.evidence_pack_id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/v1/workforce/evidence-packs",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"country_code\": \"US\",\n  \"region\": {\n    \"type\": \"state\",\n    \"code\": \"CT\"\n  },\n  \"decision\": \"workforce_investment\",\n  \"industries\": [\n    \"311\",\n    \"334\"\n  ],\n  \"occupations\": [\n    \"17-2112\",\n    \"51-1011\",\n    \"51-4041\",\n    \"51-4121\",\n    \"49-9041\"\n  ],\n  \"language\": \"en\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Verify order-independent reuse",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Cache reuse\", function () { pm.expect(pm.response.code).to.eql(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Same Evidence Pack\", function () { pm.expect(body.evidence_pack_id).to.eql(pm.collectionVariables.get(\"evidence_pack_id\")); });",
+                  "pm.test(\"Reused\", function () { pm.expect(body.cache_status).to.eql(\"reused\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/v1/workforce/evidence-packs",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"country_code\": \"US\",\n  \"region\": {\n    \"type\": \"state\",\n    \"code\": \"CT\"\n  },\n  \"decision\": \"workforce_investment\",\n  \"industries\": [\n    \"334\",\n    \"311\"\n  ],\n  \"occupations\": [\n    \"49-9041\",\n    \"51-4121\",\n    \"51-4041\",\n    \"51-1011\",\n    \"17-2112\"\n  ],\n  \"language\": \"en\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Retrieve Evidence Pack JSON",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+                  "pm.test(\"JSON response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"application/json\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/workforce/evidence-packs/{{evidence_pack_id}}"
+          }
+        },
+        {
+          "name": "Retrieve Evidence Pack HTML",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP success\", function () { pm.expect(pm.response.code).to.eql(200); });",
+                  "pm.test(\"HTML response\", function () { pm.expect(pm.response.headers.get(\"Content-Type\") || \"\").to.include(\"text/html\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html"
+              }
+            ],
+            "url": "{{base_url}}/api/v1/workforce/evidence-packs/{{evidence_pack_id}}/report?format=html"
           }
         }
       ]
