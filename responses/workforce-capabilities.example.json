@@ -1,0 +1,35 @@
+{
+  "country_code": "US",
+  "status": "supported",
+  "service_status": "controlled_beta",
+  "geographies": [
+    {
+      "type": "state",
+      "code_system": "USPS",
+      "supported": true
+    }
+  ],
+  "occupation_taxonomy": {
+    "name": "SOC",
+    "vintage": "2018",
+    "reference_release": "O*NET 30.3",
+    "official_reference_url": "https://www.bls.gov/soc/"
+  },
+  "features": {
+    "occupation_catalog": "available",
+    "evidence_pack_creation": "available"
+  },
+  "evidence": {
+    "occupation_reference": "available",
+    "employment_and_wages": "operator_snapshot_only",
+    "industry_workforce_flows": "operator_snapshot_only",
+    "advertised_job_demand": "hold"
+  },
+  "delivery_formats": [
+    "json",
+    "html"
+  ],
+  "languages": [
+    "en"
+  ]
+}
