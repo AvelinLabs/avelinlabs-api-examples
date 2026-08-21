@@ -6,6 +6,7 @@ These files show response shapes; they are not substitutes for the API contract.
 | --- | --- | --- |
 | `health-live.example.json`, `health-ready.example.json` | Sanitized live output | Recorded from PROD on 2026-08-10. The payloads contain no identifiers or secrets. |
 | `error-invalid-api-key.example.json` | Sanitized fixture derived from live behavior | Field names and stable values were checked against a controlled PROD `401`; `request_id` is a placeholder, not a captured production value. |
+| `workforce-capabilities.example.json`, `workforce-evidence-pack-created.example.json` | Sanitized live output | Recorded from the authenticated production acceptance on 2026-08-21. The Evidence Pack identifier, approved source lineage, counts, and timestamps are non-secret reproducibility evidence; no Runtime API Key or account identifier is included. |
 | `occupation-candidates.example.json` | Illustrative output fixture | Synthetic, OpenAPI-valid output for the synthetic request in `payloads/occupation-candidates.json`. It is not a live snapshot and intentionally shows five candidate objects for `limit: 5`. |
 | All other `.example.json` files in this directory | Illustrative output fixtures | Synthetic, realistic examples validated against the matching response schema where OpenAPI defines one. Counts, scores, identifiers, and text are not claimed as production observations. |
 

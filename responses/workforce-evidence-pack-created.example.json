@@ -1,0 +1,34 @@
+{
+  "evidence_pack_id": "wep_749d99fb37101702f35440f15cb63362",
+  "status": "buyer_review_ready",
+  "cache_status": "created",
+  "country_code": "US",
+  "region": {
+    "type": "state",
+    "code": "CT"
+  },
+  "decision": "workforce_investment",
+  "decision_readiness": "not_ready",
+  "advertised_job_demand": "hold",
+  "formats": [
+    "json",
+    "html"
+  ],
+  "created_at": "2026-08-21T12:59:21.983245Z",
+  "source_lineage": [
+    {
+      "source_id": "bls_oews_ct_2025",
+      "artifact_type": "avelin.oews_snapshot",
+      "retrieved_at": "2026-08-20T13:55:53.906806+00:00",
+      "row_count": 9,
+      "raw_sha256": "589c897f19295c05cec357627a3560bba512e704b61797207dc98aadc2601cc4"
+    },
+    {
+      "source_id": "census_qwi_ct_2025_q2",
+      "artifact_type": "avelin.qwi_snapshot",
+      "retrieved_at": "2026-08-20T11:27:17.838154+00:00",
+      "row_count": 93,
+      "raw_sha256": "94c2994703d21e3d3479f3eae2b5300b65eeaafc0d6135c98665c60df8e6befc"
+    }
+  ]
+}

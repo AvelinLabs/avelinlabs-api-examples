@@ -1,14 +1,11 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-if (-not $env:BASE_URL) {
-    throw "Set BASE_URL to an environment where the controlled-beta Workforce API is enabled."
-}
 if (-not $env:AVELIN_API_KEY) {
     throw "Set AVELIN_API_KEY to a Runtime API Key before running this example."
 }
 
-$baseUrl = $env:BASE_URL.TrimEnd("/")
+$baseUrl = if ($env:BASE_URL) { $env:BASE_URL.TrimEnd("/") } else { "https://api.avelinlabs.com" }
 $headers = @{
     Authorization = "Bearer $($env:AVELIN_API_KEY)"
     Accept = "application/json"

@@ -3,14 +3,11 @@ set -euo pipefail
 
 BASE_URL="${BASE_URL:-https://api.avelinlabs.com}"
 : "${AVELIN_API_KEY:?Set AVELIN_API_KEY to a Runtime API Key.}"
-
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+: "${EVIDENCE_PACK_ID:?Set EVIDENCE_PACK_ID to the identifier returned by creation.}"
 
 curl --fail-with-body --silent --show-error \
-  -X POST "${BASE_URL%/}/api/v1/workforce/evidence-packs" \
+  "${BASE_URL%/}/api/v1/workforce/evidence-packs/${EVIDENCE_PACK_ID}" \
   -H "Authorization: Bearer ${AVELIN_API_KEY}" \
-  -H "Accept: application/json" \
-  -H "Content-Type: application/json" \
-  --data "@${repo_root}/workforce-evidence-pack/request.json"
+  -H "Accept: application/json"
 
 printf '\n'

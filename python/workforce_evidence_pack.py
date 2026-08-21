@@ -14,10 +14,8 @@ OUTPUT_DIR = Path(os.environ.get("OUTPUT_DIR", ROOT / "workforce-evidence-pack" 
 
 
 def require_environment() -> tuple[str, str]:
-    base_url = str(os.environ.get("BASE_URL") or "").rstrip("/")
+    base_url = str(os.environ.get("BASE_URL") or "https://api.avelinlabs.com").rstrip("/")
     api_key = str(os.environ.get("AVELIN_API_KEY") or "")
-    if not base_url:
-        raise SystemExit("Set BASE_URL to an environment where the controlled-beta Workforce API is enabled.")
     if not api_key:
         raise SystemExit("Set AVELIN_API_KEY to a Runtime API Key before running this example.")
     return base_url, api_key
