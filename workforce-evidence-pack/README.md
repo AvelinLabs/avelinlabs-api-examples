@@ -11,8 +11,8 @@ This example exercises the complete authenticated Workforce API lifecycle:
 
 The endpoint packages approved OEWS occupation evidence, separate Census QWI
 industry-flow evidence, and governed O*NET 30.3 task and skill reference data.
-It does not rank occupations, infer NAICS from SOC, make an investment
-recommendation, or call JobDataAPI during the request.
+It does not rank occupations, infer NAICS from SOC, or make an investment
+recommendation.
 
 ## Availability
 
@@ -109,4 +109,3 @@ The workflow succeeds only when it confirms:
 - the second response reports `cache_status=reused`;
 - JSON and standalone HTML retrieval both succeed.
 
-JobDataAPI remains `HOLD` and no provider subscription is required.
