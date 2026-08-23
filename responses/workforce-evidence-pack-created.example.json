@@ -9,7 +9,6 @@
   },
   "decision": "workforce_investment",
   "decision_readiness": "not_ready",
-  "advertised_job_demand": "hold",
   "formats": [
     "json",
     "html"

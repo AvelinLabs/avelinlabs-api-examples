@@ -22,8 +22,7 @@
   "evidence": {
     "occupation_reference": "available",
     "employment_and_wages": "operator_snapshot_only",
-    "industry_workforce_flows": "operator_snapshot_only",
-    "advertised_job_demand": "hold"
+    "industry_workforce_flows": "operator_snapshot_only"
   },
   "delivery_formats": [
     "json",

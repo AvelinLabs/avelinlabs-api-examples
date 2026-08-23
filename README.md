@@ -194,7 +194,7 @@ On Windows replace `python3` with `py -3`.
 
 The controlled-beta workflow under [`workforce-evidence-pack/`](workforce-evidence-pack/README.md) verifies capabilities, U.S. SOC help, deterministic create/reuse, account-scoped JSON retrieval, and standalone HTML retrieval. It includes Python, native PowerShell, and cURL entry points plus the accepted static Connecticut buyer-report fixture.
 
-The hosted controlled beta is live at `https://api.avelinlabs.com` for the approved `US / state / CT` snapshot. Override `BASE_URL` only for an approved DEV or staging environment. The workflow does not call paid providers, does not establish arbitrary-country support, and keeps JobDataAPI on `HOLD`.
+The hosted controlled beta is live at `https://api.avelinlabs.com` for the approved `US / state / CT` snapshot. Override `BASE_URL` only for an approved DEV or staging environment. The workflow packages approved OEWS occupation evidence, separate Census QWI industry evidence, and governed O*NET reference data; it does not establish arbitrary-country support.
 
 ## Input quality evaluation
 
