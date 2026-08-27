@@ -2,11 +2,13 @@
 set -euo pipefail
 
 BASE_URL="${BASE_URL:-https://api.avelinlabs.com}"
+AVELIN_TIMEOUT_SECONDS="${AVELIN_TIMEOUT_SECONDS:-60}"
 : "${AVELIN_API_KEY:?Set AVELIN_API_KEY before running this example.}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 curl -sS \
+  --max-time "${AVELIN_TIMEOUT_SECONDS}" \
   -X POST "${BASE_URL}/api/v1/job/classify" \
   -H "Authorization: Bearer ${AVELIN_API_KEY}" \
   -H "Content-Type: application/json" \
