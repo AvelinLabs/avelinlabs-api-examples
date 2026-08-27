@@ -16,6 +16,17 @@ def base_url() -> str:
     return os.environ.get("BASE_URL", "https://api.avelinlabs.com").rstrip("/")
 
 
+def timeout_seconds() -> float:
+    raw_value = os.environ.get("AVELIN_TIMEOUT_SECONDS", "60")
+    try:
+        value = float(raw_value)
+    except ValueError as exc:
+        raise SystemExit("AVELIN_TIMEOUT_SECONDS must be a positive number.") from exc
+    if value <= 0:
+        raise SystemExit("AVELIN_TIMEOUT_SECONDS must be a positive number.")
+    return value
+
+
 def api_key(required: bool = True) -> str | None:
     value = os.environ.get("AVELIN_API_KEY")
     if required and not value:
@@ -42,7 +53,7 @@ def request_json(method: str, path: str, *, payload: dict[str, Any] | None = Non
 
     url = f"{base_url()}{path}"
     try:
-        response = requests.request(method, url, headers=headers, json=payload, timeout=30)
+        response = requests.request(method, url, headers=headers, json=payload, timeout=timeout_seconds())
         response.raise_for_status()
     except requests.HTTPError as exc:
         print(f"HTTP error calling {url}: {exc}")
