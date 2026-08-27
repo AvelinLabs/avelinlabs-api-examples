@@ -99,6 +99,10 @@ Authorization: Bearer <runtime-api-key>
 
 `GET /health/live` and `GET /health/ready` are public and anonymous.
 
+## Beta request timeout
+
+Use a client timeout of at least 60 seconds for `/api/v1/job/classify` and `/api/v1/job/analyze` during the free beta. The Python, PowerShell, and cURL job examples default to 60 seconds; set `AVELIN_TIMEOUT_SECONDS` to override that value.
+
 ## Endpoint guide
 
 The explanations are centralized here so the Bash/cURL, PowerShell, Command Prompt, Python, and Postman variants can stay small and consistent.
@@ -258,7 +262,7 @@ Both workflows perform best-effort cleanup if a later request fails. Current quo
 
 Response fixtures are stored under `responses/`. Read `responses/README.md` before using them.
 
-`responses/README.md` classifies each saved payload as sanitized live output, a sanitized fixture derived from live behavior, or an illustrative output fixture. Illustrative values are never presented as production observations, and provenance metadata is kept outside response JSON.
+`responses/README.md` classifies each saved payload as sanitized live output, a sanitized fixture derived from live behavior, or an illustrative output fixture. Illustrative values are never presented as production observations, and provenance metadata is kept outside response JSON. Exact occupation codes and numeric decision-support values can evolve during the beta as governed ranking quality improves.
 
 `AUTO_ACCEPT` is a routing signal for low-risk workflow handling where customer policy permits it. It is not a final hiring decision.
 

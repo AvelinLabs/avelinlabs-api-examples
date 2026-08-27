@@ -6,6 +6,20 @@ function Get-AvelinBaseUrl {
     return "https://api.avelinlabs.com"
 }
 
+function Get-AvelinTimeoutSeconds {
+    if (-not $env:AVELIN_TIMEOUT_SECONDS) { return 60 }
+
+    try {
+        $value = [int]$env:AVELIN_TIMEOUT_SECONDS
+    }
+    catch {
+        throw "AVELIN_TIMEOUT_SECONDS must be a positive integer."
+    }
+
+    if ($value -lt 1) { throw "AVELIN_TIMEOUT_SECONDS must be a positive integer." }
+    return $value
+}
+
 function Invoke-AvelinApi {
     param(
         [Parameter(Mandatory = $true)][string]$Method,
@@ -26,6 +40,7 @@ function Invoke-AvelinApi {
         Method = $Method
         Uri = "$(Get-AvelinBaseUrl)$Path"
         Headers = $headers
+        TimeoutSec = Get-AvelinTimeoutSeconds
     }
     if ($null -ne $Body) {
         $parameters.ContentType = "application/json"
